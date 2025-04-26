@@ -1,0 +1,3 @@
+export const SMALL_CAMERA_MIN_WIDTH = 200;
+export const SMALL_CAMERA_MIN_HEIGHT = 140;
+
