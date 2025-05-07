@@ -35,3 +35,14 @@ declare type AppStream = {
 	name: string;
 	index: number;
 }
+
+
+declare type CameraCapture = {
+	imageDataURI: string;
+	width: number;
+	height: number;
+}
+
+interface RegExpConstructor {
+	escape: (string: string) => string;
+}

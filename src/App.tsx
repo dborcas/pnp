@@ -124,24 +124,26 @@ export const App = () => {
 	
 	
 	const devicesButton = (
-	  multiCamera ?
-		<button
-		  className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls`}
-		  onClick={() => {
-			  setIsModalOpen(true);
-		  }}
-		>
+		multiCamera ?
+			<button
+				className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls`}
+				onClick={() => {
+					setIsModalOpen(true);
+				}}
+			>
 				<span className={`material-symbols-outlined button-icon`}>
 				  photo_camera
 				</span>
-		</button>
-		: <></>
+			</button>
+			: <></>
 	);
+
 	return <div className={`App ${showControls ? "" : "hide-controls"}`}>
 		<div className={`device-buttons`}>
 			{devicesButton}
 			{swapCameraButton}
 		</div>
+
 		<CameraView
 		  camera={mainCamera}
 		  kind={"main"}

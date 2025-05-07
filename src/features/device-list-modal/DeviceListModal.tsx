@@ -151,7 +151,7 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 	  <>
 		  <dialog
 			ref={dialogRef}
-			className={`DeviceListModal ${className ?? ""} ${isModalOpen ? "" : "hidden"}`}
+			className={`DeviceListModal ${className ?? ""} ${isModalOpen ? "" : "display-hidden"}`}
 			onFocus={() => {
 				(lastFocus ?? firstFocus.current as Nullable<HTMLElement>)?.focus();
 			}}

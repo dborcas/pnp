@@ -36,6 +36,7 @@ export const CameraView = (opts: CameraProps) => {
 	const devices = useAppSelector(devicesSelector);
 	const appStreamIndex = useAppSelector(appStreamDeviceIndexSelector);
 
+
 	
 	const clearCamera = () => {
 		dispatch(_clearCamera(kind));
@@ -45,7 +46,7 @@ export const CameraView = (opts: CameraProps) => {
 		if (!video) {
 			return;
 		}
-		video.classList.add("hidden");
+		video.classList.add("display-hidden");
 		video.pause();
 		video.onerror = noOp;
 		video.removeAttribute("src");
@@ -62,7 +63,7 @@ export const CameraView = (opts: CameraProps) => {
 		if (video == null) {
 			return;
 		}
-		video.classList.remove("hidden");
+		video.classList.remove("display-hidden");
 		video.srcObject = camera;
 		setHasSource(true);
 	};
@@ -128,7 +129,7 @@ export const CameraView = (opts: CameraProps) => {
 		if (video == null) {
 			return;
 		}
-		video.classList.remove("hidden");
+		video.classList.remove("display-hidden");
 		video.onerror = (event: Event | string) => {
 			clearCamera();
 			if (typeof event === "string") {
