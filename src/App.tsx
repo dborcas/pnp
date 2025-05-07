@@ -80,8 +80,8 @@ export const App = () => {
 	};
 
 	useEffect(() => {
-		window.addEventListener("keyup", (e) => {
-			if (e.shiftKey && e.key === "f") {
+		document.body.addEventListener("keypress", (e) => {
+			if (e.shiftKey && e.key.toLowerCase() === "f") {
 				document.querySelector(".App")
 					?.requestFullscreen()
 					.then(() => {
