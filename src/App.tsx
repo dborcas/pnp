@@ -78,6 +78,32 @@ export const App = () => {
 		const action = setCamera({ camera: "small", device: device, devices });
 		dispatch(action);
 	};
+
+	useEffect(() => {
+		window.addEventListener("keyup", (e) => {
+			if (e.shiftKey && e.key === "f") {
+				document.querySelector(".App")
+					?.requestFullscreen()
+					.then(() => {
+						// ignore
+					})
+					.catch(() => {
+						console.error("Failed to request full screen")
+					})
+
+				return false;
+			}
+			if (e.key.toLowerCase() === "escape") {
+				document.exitFullscreen()
+					.then( () =>{
+						// ignore
+					})
+					.catch(() => {
+						//ignore
+					});
+			}
+		})
+	}, [])
 	
 	
 	useEffect(() => {
