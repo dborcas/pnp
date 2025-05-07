@@ -100,7 +100,7 @@ export const SmallCameraView = (opts: SmallCameraOpts) => {
 			dispatch(setSmallCameraScreenPosition({ x: data.x, y: data.y }));
 		}}
 		data-shape={shape}
-		className={`${hide ? "hidden" : ""} small-camera-container`}
+		className={`${hide ? "display-hidden" : ""} small-camera-container`}
 		minWidth={SMALL_CAMERA_MIN_WIDTH}
 		minHeight={SMALL_CAMERA_MIN_HEIGHT}
 		onResizeStop={(e, _direction, _ref, delta, position) => {
