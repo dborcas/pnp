@@ -1,6 +1,6 @@
 {
-  "name": "Picture-in-Picture",
-  "short_name": "P-in-P",
+  "name": "Passthrough Camera",
+  "short_name": "DocCam",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#4a117c",
-  "background_color": "#a61178",
+  "theme_color": "#d82e9e",
+  "background_color": "#400e3c",
   "display": "standalone"
 }
