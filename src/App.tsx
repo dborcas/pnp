@@ -1,6 +1,6 @@
 import "./App.css";
-import { CameraView } from "./features/camera-view/CameraView.tsx";
-import { useAppDispatch, useAppSelector } from "./app/hooks.ts";
+import {CameraView} from "./features/camera-view/CameraView.tsx";
+import {useAppDispatch, useAppSelector} from "./app/hooks.ts";
 import {
 	clearCamera,
 	hasSwappableCamerasSelector,
@@ -11,24 +11,24 @@ import {
 	swapCameras,
 	toggleCameraControls,
 } from "./features/camera-view/cameraViewsSlice.ts";
-import { useEffect, useState } from "react";
-import { onErrorToast } from "./features/error/onerror.ts";
-import { SmallCameraView } from "./features/small-camera/SmallCameraView.tsx";
-import { noOp } from "./utils/noOp.ts";
-import { devicesSelector, refreshDevices, setDevices } from "./features/device-list-modal/devicesSlice.ts";
+import {useEffect, useState} from "react";
+import {onErrorToast} from "./features/error/onerror.ts";
+import {SmallCameraView} from "./features/small-camera/SmallCameraView.tsx";
+import {noOp} from "./utils/noOp.ts";
+import {devicesSelector, refreshDevices, setDevices} from "./features/device-list-modal/devicesSlice.ts";
 import DeviceListModal from "./features/device-list-modal/DeviceListModal.tsx";
 
 let loaded = 0;
 export const App = () => {
-	
+
 	const mainCamera: Nullable<DeviceInfo> = useAppSelector(mainCameraSelector);
 	const dispatch = useAppDispatch();
 	const devices = useAppSelector(devicesSelector);
 	const showControls = useAppSelector(showControlsSelector);
 	const hasSwappableCameras = useAppSelector(hasSwappableCamerasSelector);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	
-	
+
+
 	useEffect(() => {
 		let onLoadState = noOp;
 		console.log(`Loaded: ${(++loaded).toString()}`);
@@ -59,7 +59,7 @@ export const App = () => {
 			document.removeEventListener("load", onLoadState);
 		};
 	}, [dispatch]);
-	
+
 	const setMainCamera = (device: Nullable<DeviceInfo>) => {
 		if (device == null) {
 			dispatch(clearCamera("main"));
@@ -68,7 +68,7 @@ export const App = () => {
 		const action = setCamera({ camera: "main", device: device, devices });
 		dispatch(action);
 	};
-	
+
 	const setSmallCamera = (device: Nullable<DeviceInfo>) => {
 		if (device == null) {
 			dispatch(clearCamera("small"));
@@ -103,8 +103,8 @@ export const App = () => {
 			}
 		})
 	}, [])
-	
-	
+
+
 	useEffect(() => {
 		const keyup = (e: KeyboardEvent) => {
 			if (e.key === " ") {
@@ -116,7 +116,7 @@ export const App = () => {
 			if (video == null) {
 				return;
 			}
-			
+
 			const app = video.parentElement?.parentElement as Nullable<HTMLElement>;
 			if (app == null) {
 				return;
@@ -135,8 +135,8 @@ export const App = () => {
 			window.removeEventListener("click", click);
 		};
 	}, [dispatch]);
-	
-	const multiCamera = (devices ?? []).length > 1;
+	const multiCamera = devices != null && devices.length > 1;
+	const hasAnyDevice = devices != null && devices.length > 0;
 	const swapCameraButton = (
 	  hasSwappableCameras && multiCamera ?
 		<button className={`icon-button app-icon-button swap-camera-button hide-on-hide-controls`} onClick={() => {
@@ -146,10 +146,10 @@ export const App = () => {
 		</button>
 		: <></>
 	);
-	
-	
+
+
 	const devicesButton = (
-		multiCamera ?
+		hasAnyDevice ?
 			<button
 				className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls`}
 				onClick={() => {
@@ -175,15 +175,18 @@ export const App = () => {
 		  onError={onErrorToast}
 		  onCameraChange={setMainCamera}
 		/>
+
+		{multiCamera ?
 		<SmallCameraView
-		  hideCamera={!showControls && ((devices?.length ?? 0) < 2)}
+		  hideCamera={!showControls && (devices.length < 2)}
 		  onError={onErrorToast}
 		  onCameraChange={setSmallCamera}
-		></SmallCameraView>
-		
+		></SmallCameraView> : <></>}
+
 		{isModalOpen ?
 		  <DeviceListModal
 			open={true}
+			hasMultipleDevices={multiCamera}
 			setIsModalOpen={setIsModalOpen}
 		  /> :
 		  <></>

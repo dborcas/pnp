@@ -17,6 +17,7 @@ export type Props = {
 	readonly open: boolean;
 	readonly setIsModalOpen: (open: boolean) => void;
 	readonly className?: Nullable<string>;
+	readonly hasMultipleDevices?: boolean;
 };
 
 const DeviceListModal = (opts: Props): JSX.Element => {
@@ -51,6 +52,7 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 		className,
 		open: isModalOpen,
 		setIsModalOpen: setIsModalOpenParent,
+		hasMultipleDevices
 	} = opts;
 	
 	const setIsModalOpen = (v: boolean) => {
@@ -171,7 +173,7 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 						  <tr>
 							  <th data-for="device">Device</th>
 							  <th data-for="camera" id="device-select-main-camera-label">Main Camera</th>
-							  <th data-for="camera" id="device-select-small-camera-label">Small Camera</th>
+							  {hasMultipleDevices ? <th data-for="camera" id="device-select-small-camera-label">Small Camera</th> : <></> }
 						  </tr>
 						  </thead>
 						  <tbody>
@@ -190,9 +192,9 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 								  <td data-for="camera">
 									  {getOption(i, "main", device)}
 								  </td>
-								  <td data-for="camera">
+								  {hasMultipleDevices ? <td data-for="camera">
 									  {getOption(i, "small", device)}
-								  </td>
+								  </td> : <></>}
 							  </tr>;
 						  })}
 						  </tbody>

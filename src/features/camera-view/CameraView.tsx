@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
 	appStreamDeviceId,
 	appStreamDeviceIndexSelector,
+	appStreamDeviceInfo,
 	devicesSelector,
 	getAppStream,
 } from "../device-list-modal/devicesSlice.ts";
@@ -82,16 +83,25 @@ export const CameraView = (opts: CameraProps) => {
 			device: newCamera,
 			camera: kind,
 		}));
-		
+
 		try {
 			await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
-		} catch {
-			
-			console.error(`Failed to get permissions for ${newCamera.label} camera`);
-			onError("Failed to ask for camera permission");
-			return;
+		} catch (e) {
+			if (newCamera.deviceId !== appStreamDeviceInfo.deviceId) {
+				if (e instanceof Error) {
+					if (e.name === "NotFoundError") {
+						onError(`Camera ${kind} not found for device ${newCamera.label}`);
+					}
+					console.error(`Camera ${kind} not found`, e);
+				} else {
+					onError(`Failed to ask for camera permission for ${kind} camera`);
+				}
+
+				clearCamera();
+				return;
+			}
 		}
-		
+
 		// request user permission on media stream
 		// note: normally, you can call this multiple times w/o needing to
 		//       request permission again
@@ -120,6 +130,7 @@ export const CameraView = (opts: CameraProps) => {
 			} else {
 				error = "Failed to get camera stream";
 			}
+			clearCamera();
 			onError(error);
 			return;
 		}

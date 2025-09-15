@@ -49,8 +49,7 @@ export const devicesSlice = createAppSlice({
 				state.appStreamIndex = ++streamIndex;
 			}),
 			selectDeviceWindow: create.asyncThunk(async (): Promise<number> => {
-				let stream: Nullable<MediaStream> = null;
-				stream = await navigator.mediaDevices.getDisplayMedia({
+				const stream = await navigator.mediaDevices.getDisplayMedia({
 					video: { displaySurface: "window" },
 				});
 				
@@ -78,8 +77,10 @@ export const devicesSlice = createAppSlice({
 						  video: true,
 					  });
 				  } catch (e) {
-					  throw new Error("Failed to get initial camera permission");
 					  console.error("Failed to get video media; ", e);
+					  return [
+						  appStreamDeviceInfo
+					  ];
 				  }
 
 				  const theDevices = await navigator.mediaDevices.enumerateDevices();
@@ -88,7 +89,7 @@ export const devicesSlice = createAppSlice({
 					.map((d) => {
 						let label = d.label;
 						const labelParts = deviceLabelRegex.exec(label);
-						if (labelParts != null && typeof labelParts[1] !== "undefined") {
+						if (typeof labelParts?.[1] !== "undefined") {
 							label = labelParts[1];
 						}
 						
@@ -111,6 +112,9 @@ export const devicesSlice = createAppSlice({
 				  rejected: (state: DevicesSliceState, e) => {
 					  console.error("Fetch device failed; Payload: ", e.payload);
 					  state.status = "failed";
+					  state.devices = [
+						  appStreamDeviceInfo
+					  ];
 				  },
 			  },
 			),
