@@ -10,7 +10,9 @@ export default defineConfig({
   server: {
     open: true,
   },
-
+  build: {
+    minify: 'terser',
+  },
   test: {
     root: import.meta.dirname,
     name: packageJson.name,
