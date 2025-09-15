@@ -1,7 +1,8 @@
 import type { CamerasSliceState } from "./cameraViewsSlice.ts";
 import { camerasSlice } from "./cameraViewsSlice.ts";
 import type { Action, Dispatch, Middleware } from "@reduxjs/toolkit";
-import { appStreamDeviceId, DevicesSliceState } from "../device-list-modal/devicesSlice.ts";
+import type { DevicesSliceState } from "../device-list-modal/devicesSlice.ts";
+import { appStreamDeviceId } from "../device-list-modal/devicesSlice.ts";
 
 
 const _localStorageKey = "picture-in-picture.state";
