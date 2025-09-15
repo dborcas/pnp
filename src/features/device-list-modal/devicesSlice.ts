@@ -1,6 +1,5 @@
 import { createAppSlice } from "../../app/createAppSlice.ts";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { noOp } from "../../utils/noOp.ts";
 
 export type DevicesSliceState = {
 	devices: Nullable<DeviceInfo[]>;
@@ -63,7 +62,9 @@ export const devicesSlice = createAppSlice({
 				appStream = newAppStream;
 				return newAppStream.index;
 			}, {
-				rejected: noOp,
+				rejected: (e: unknown) => {
+					console.error("Failed to select app window", e);
+				},
 				fulfilled: (state, action) => {
 					state.appStreamIndex = action.payload;
 				},
@@ -71,16 +72,16 @@ export const devicesSlice = createAppSlice({
 			refreshDevices: create.asyncThunk(
 			  async (): Promise<DeviceInfo[]> => {
 				  // get list of devices
-				  console.log("Getting List");
 				  try {
 					  await navigator.mediaDevices.getUserMedia({
 						  audio: false,
 						  video: true,
 					  });
 				  } catch (e) {
-					  console.error(e);
 					  throw new Error("Failed to get initial camera permission");
+					  console.error("Failed to get video media; ", e);
 				  }
+
 				  const theDevices = await navigator.mediaDevices.enumerateDevices();
 				  const out = theDevices
 					.filter(info => info.kind == "videoinput")

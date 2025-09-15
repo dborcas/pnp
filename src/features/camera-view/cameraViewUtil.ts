@@ -35,7 +35,6 @@ export const getInitialState = (): CamerasSliceState => {
 		if (state.mainCamera?.deviceId === appStreamDeviceId) {
 			state.mainCamera = null;
 		}
-		console.log(state);
 		return {
 			...initialState(),
 			...state,
