@@ -54,7 +54,6 @@ export const CameraView = (opts: CameraProps) => {
 	};
 	
 	const changeSource = (camera: Nullable<MediaProvider>) => {
-		console.log("ChangeSource: ", camera);
 		if (camera == null) {
 			clearCamera();
 			return;
@@ -67,7 +66,7 @@ export const CameraView = (opts: CameraProps) => {
 		video.srcObject = camera;
 		setHasSource(true);
 	};
-	
+
 	const setCamera = async (newCamera: Nullable<DeviceInfo>) => {
 		if (newCamera == null) {
 			clearCamera()
@@ -96,11 +95,10 @@ export const CameraView = (opts: CameraProps) => {
 		// request user permission on media stream
 		// note: normally, you can call this multiple times w/o needing to
 		//       request permission again
-		console.log("Selecting device: %s for %s", JSON.stringify(newCamera), kind);
-		
+
 		let mediaStreamRef: MediaProvider | undefined | MediaStream;
 		try {
-			
+
 			if (newCamera.deviceId === appStreamDeviceId) {
 				mediaStreamRef = getAppStream()?.stream;
 			} else {
@@ -116,7 +114,7 @@ export const CameraView = (opts: CameraProps) => {
 			let error: string;
 			if (e instanceof Error) {
 				error = e.message;
-				console.log(`${e.message}\n${e.stack ?? ""}`.trim());
+				console.error(`${e.message}\n${e.stack ?? ""}`.trim());
 			} else if (typeof e === "string") {
 				error = e;
 			} else {
@@ -146,7 +144,7 @@ export const CameraView = (opts: CameraProps) => {
 		if (camera != null && (camera as Partial<DeviceInfo>).deviceId != null) {
 			setCamera(camera)
 			  .then(() => {
-				  console.log("Set camera");
+				  // ignore
 			  })
 			  .catch((e: unknown) => {
 				  console.error("Failed to set camera on init: ", e);

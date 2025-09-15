@@ -35,14 +35,13 @@ export const App = () => {
 		onLoadState = () => {
 			navigator.mediaDevices.getUserMedia({ audio: false, video: true })
 			  .then((stream) => {
-				  console.log("Device changed to: " + stream.id);
+				  console.log(`"Device changed to: Stream[${stream.id}]`);
 			  })
-			  .catch(() => {
-				  console.log("Camera list not okay");
+			  .catch((e: unknown) => {
+				  console.error("Camera list not okay; ", e);
 			  });
 			dispatch(refreshDevices())
 			  .then((devices) => {
-				  console.log("Device thunk loaded", devices);
 				  dispatch(setDevices(devices.payload as DeviceInfo[]));
 			  })
 			  .catch((e: unknown) => {

@@ -41,17 +41,9 @@ export const camerasSlice = createAppSlice({
                         if (device.deviceId === other.deviceId) {
                             console.log("Swapping cameras; Camera: ", main);
                             state = setOther(state, main);
-                        } else {
-                            console.log({
-                                main,
-                                device,
-                            });
                         }
                     }
                     state = setMain(state, device);
-                    console.log({
-                        ...state,
-                    });
                     return state;
                 }),
 
