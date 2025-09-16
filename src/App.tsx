@@ -17,8 +17,10 @@ import {SmallCameraView} from "./features/small-camera/SmallCameraView.tsx";
 import {noOp} from "./utils/noOp.ts";
 import {devicesSelector, refreshDevices, setDevices} from "./features/device-list-modal/devicesSlice.ts";
 import DeviceListModal from "./features/device-list-modal/DeviceListModal.tsx";
+import {isMultiCameraAllowed} from "./utils/allowMulticamera.ts";
 
 let loaded = 0;
+
 export const App = () => {
 
 	const mainCamera: Nullable<DeviceInfo> = useAppSelector(mainCameraSelector);
@@ -135,7 +137,7 @@ export const App = () => {
 			window.removeEventListener("click", click);
 		};
 	}, [dispatch]);
-	const multiCamera = devices != null && devices.length > 1;
+	const multiCamera = isMultiCameraAllowed() && devices != null && devices.length > 1;
 	const hasAnyDevice = devices != null && devices.length > 0;
 	const swapCameraButton = (
 	  hasSwappableCameras && multiCamera ?
