@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import {
 	appStreamDeviceId,
 	appStreamDeviceIndexSelector,
-	appStreamDeviceInfo,
 	devicesSelector,
 	getAppStream,
 } from "../device-list-modal/devicesSlice.ts";
@@ -20,6 +19,7 @@ export type CameraProps = {
 	kind: CameraKind;
 	onError: (error: string) => void;
 	onCameraChange?: (deviceInfo: DeviceInfo) => void;
+	isFallbackCamera: boolean;
 }
 
 export const CameraView = (opts: CameraProps) => {
@@ -29,6 +29,7 @@ export const CameraView = (opts: CameraProps) => {
 		camera,
 		kind,
 		onError,
+		isFallbackCamera
 	} = opts;
 	
 	const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -86,16 +87,22 @@ export const CameraView = (opts: CameraProps) => {
 
 		try {
 			await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
-		} catch (e) {
-			if (newCamera.deviceId !== appStreamDeviceInfo.deviceId) {
-				if (e instanceof Error) {
-					if (e.name === "NotFoundError") {
-						onError(`Camera ${kind} not found for device ${newCamera.label}`);
-					}
-					console.error(`Camera ${kind} not found`, e);
-				} else {
-					onError(`Failed to ask for camera permission for ${kind} camera`);
-				}
+		} catch /*(e)*/ {
+			if (isFallbackCamera) {
+				return;
+			}
+			if (newCamera.deviceId !== appStreamDeviceId) {
+				// 	if (e instanceof Error) {
+				// 		if (e.name === "NotFoundError") {
+				// 			onError(`Camera ${kind} not found for device ${newCamera.label}`);
+				// 		}
+				// 		console.error(`Camera ${kind} not found`, e);
+				// 	} else {
+				// 		onError(`Failed to ask for camera permission for ${kind} camera`);
+				// 	}
+				//
+				// 	clearCamera();
+				// 	return;
 
 				clearCamera();
 				return;
@@ -161,6 +168,7 @@ export const CameraView = (opts: CameraProps) => {
 				  console.error("Failed to set camera on init: ", e);
 			  });
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [camera, appStreamIndex]);
 	
 	
