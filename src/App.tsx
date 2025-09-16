@@ -3,6 +3,7 @@ import {CameraView} from "./features/camera-view/CameraView.tsx";
 import {useAppDispatch, useAppSelector} from "./app/hooks.ts";
 import {
 	clearCamera,
+	hasMainCameraSelector,
 	hasSwappableCamerasSelector,
 	mainCameraSelector,
 	refreshLoadedCameras,
@@ -14,7 +15,6 @@ import {
 import {useEffect, useState} from "react";
 import {onErrorToast} from "./features/error/onerror.ts";
 import {SmallCameraView} from "./features/small-camera/SmallCameraView.tsx";
-import {noOp} from "./utils/noOp.ts";
 import {devicesSelector, refreshDevices, setDevices} from "./features/device-list-modal/devicesSlice.ts";
 import DeviceListModal from "./features/device-list-modal/DeviceListModal.tsx";
 import {isMultiCameraAllowed} from "./utils/allowMulticamera.ts";
@@ -24,6 +24,7 @@ let loaded = 0;
 export const App = () => {
 
 	const mainCamera: Nullable<DeviceInfo> = useAppSelector(mainCameraSelector);
+	const hasMainCamera = useAppSelector(hasMainCameraSelector);
 	const dispatch = useAppDispatch();
 	const devices = useAppSelector(devicesSelector);
 	const showControls = useAppSelector(showControlsSelector);
@@ -32,9 +33,8 @@ export const App = () => {
 
 
 	useEffect(() => {
-		let onLoadState = noOp;
 		console.log(`Loaded: ${(++loaded).toString()}`);
-		onLoadState = () => {
+		const onLoadState = () => {
 			navigator.mediaDevices.getUserMedia({ audio: false, video: true })
 			  .then((stream) => {
 				  console.log(`"Device changed to: Stream[${stream.id}]`);
@@ -176,6 +176,7 @@ export const App = () => {
 		  kind={"main"}
 		  onError={onErrorToast}
 		  onCameraChange={setMainCamera}
+		  isFallbackCamera={!hasMainCamera}
 		/>
 
 		{multiCamera ?

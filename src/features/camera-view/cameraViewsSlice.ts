@@ -4,7 +4,9 @@ import {getInitialState} from "./cameraViewUtil.ts";
 
 export type CamerasSliceState = {
     mainCamera: Nullable<DeviceInfo>;
+    lastMainCamera?: Nullable<DeviceInfo>;
     smallCamera: Nullable<DeviceInfo>;
+    lastSmallCamera?: Nullable<DeviceInfo>;
     showControls: boolean;
 }
 
@@ -49,12 +51,12 @@ export const camerasSlice = createAppSlice({
 
             refreshLoadedCameras: create.reducer((state) => {
                 const tick = ++_tick;
-                const smallCamera = state.smallCamera;
+                const smallCamera = state.smallCamera ?? state.lastSmallCamera;
                 if (smallCamera) {
                     smallCamera.tick = tick;
                     state.smallCamera = smallCamera;
                 }
-                const mainCamera = state.mainCamera;
+                const mainCamera = state.mainCamera ?? state.lastMainCamera;
                 if (mainCamera) {
                     mainCamera.tick = tick;
                     state.mainCamera = mainCamera;
@@ -101,13 +103,17 @@ export const camerasSlice = createAppSlice({
         smallCamera: (state: CamerasSliceState) => state.smallCamera,
         showControls: (state: CamerasSliceState) => state.showControls,
         hasSwappableCameras: (state: CamerasSliceState) => state.mainCamera?.deviceId != null && state.mainCamera.deviceId !== state.smallCamera?.deviceId,
+        hasMainCamera: (state: CamerasSliceState) => state.mainCamera != null,
+        hasSmallCamera: (state: CamerasSliceState) => state.smallCamera != null,
     },
 });
 
 // Action creators are generated for each case reducer function.
 export const {
     mainCamera: mainCameraSelector,
+    hasMainCamera: hasMainCameraSelector,
     smallCamera: smallCameraSelector,
+    hasSmallCamera: hasSmallCameraSelector,
     showControls: showControlsSelector,
     hasSwappableCameras: hasSwappableCamerasSelector,
 } = camerasSlice.selectors;
@@ -131,6 +137,7 @@ const modifiers = (camera: CameraKind) => {
                 return {
                     ...state,
                     mainCamera: camera,
+                    lastMainCamera: camera,
                 };
             },
             getOther: (state: CamerasSliceState) => {
@@ -140,6 +147,7 @@ const modifiers = (camera: CameraKind) => {
                 return {
                     ...state,
                     smallCamera: camera,
+                    lastSmallCamera: camera,
                 };
             },
         };
@@ -152,6 +160,7 @@ const modifiers = (camera: CameraKind) => {
                 return {
                     ...state,
                     smallCamera: camera,
+                    lastSmallCamera: camera,
                 };
             },
             getOther: (state: CamerasSliceState) => {
@@ -161,6 +170,7 @@ const modifiers = (camera: CameraKind) => {
                 return {
                     ...state,
                     mainCamera: camera,
+                    lastMainCamera: camera,
                 };
             },
         };
