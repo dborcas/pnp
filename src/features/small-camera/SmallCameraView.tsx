@@ -11,7 +11,12 @@ import {
 	smallCameraSizeSelector,
 } from "./smallCameraViewSlice.ts";
 
-import { mainCameraSelector, showControlsSelector, smallCameraSelector } from "../camera-view/cameraViewsSlice.ts";
+import {
+	hasSmallCameraSelector,
+	mainCameraSelector,
+	showControlsSelector,
+	smallCameraSelector
+} from "../camera-view/cameraViewsSlice.ts";
 import { SMALL_CAMERA_MIN_HEIGHT, SMALL_CAMERA_MIN_WIDTH } from "../../utils/constants.ts";
 import { CameraView } from "../camera-view/CameraView.tsx";
 import { useEffect } from "react";
@@ -34,7 +39,7 @@ export const SmallCameraView = (opts: SmallCameraOpts) => {
 	const hideControls = !useAppSelector(showControlsSelector);
 	const camera: Nullable<DeviceInfo> = useAppSelector(smallCameraSelector);
 	const isSameAsMain = useAppSelector(mainCameraSelector)?.deviceId === camera?.deviceId;
-	const hasSmall = camera != null;
+	const hasSmall = useAppSelector(hasSmallCameraSelector);
 	const showSmallCamera = useAppSelector(showSmallCameraSelector)
 	
 	const hide = hideControls && (!hasSmall || isSameAsMain || !showSmallCamera);
@@ -125,6 +130,7 @@ export const SmallCameraView = (opts: SmallCameraOpts) => {
 			onError={onError}
 			camera={camera}
 			onCameraChange={opts.onCameraChange}
+			isFallbackCamera={!hasSmall}
 		  ></CameraView>
 		  </div>
 	  </Rnd>

@@ -28,20 +28,34 @@ export const getInitialState = (): CamerasSliceState => {
 			//ignore
 		}
 	}
-	
-	if (state != null) {
-		if (state.smallCamera?.deviceId === appStreamDeviceId) {
-			state.smallCamera = null;
-		}
-		if (state.mainCamera?.deviceId === appStreamDeviceId) {
-			state.mainCamera = null;
-		}
-		return {
-			...initialState(),
-			...state,
-		};
+	const baseState = initialState();
+	if (state == null) {
+		return baseState;
 	}
-	return initialState();
+	if (state.smallCamera?.deviceId === appStreamDeviceId) {
+		state.smallCamera = null;
+	}
+	if (state.mainCamera?.deviceId === appStreamDeviceId) {
+		state.mainCamera = null;
+	}
+	if (state.smallCamera != null) {
+		state = {
+			...state,
+			lastSmallCamera: state.smallCamera,
+			smallCamera: null,
+		}
+	}
+	if (state.mainCamera != null) {
+		state = {
+			...state,
+			lastMainCamera: state.mainCamera,
+			mainCamera: null,
+		}
+	}
+	return {
+		...baseState,
+		...state,
+	};
 };
 
 
