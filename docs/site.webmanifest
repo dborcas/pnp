@@ -3,19 +3,19 @@
   "short_name": "DocCam",
   "icons": [
     {
-      "src": "/pnp/web-app-manifest-192x192.png",
+      "src": "/pnp/doc-cam-app-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/pnp/web-app-manifest-256x256.png",
+      "src": "/pnp/doc-cam-app-icon-256x256.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/pnp/web-app-manifest-512x512.png",
+      "src": "/pnp/doc-cam-app-icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
