@@ -186,13 +186,11 @@ export const App = () => {
 		  onCameraChange={setSmallCamera}
 		></SmallCameraView> : <></>}
 
-		{isModalOpen ?
 		  <DeviceListModal
 			open={true}
 			hasMultipleDevices={multiCamera}
+			isModalOpen={isModalOpen}
 			setIsModalOpen={setIsModalOpen}
-		  /> :
-		  <></>
-		}
+		  />
 	</div>;
 };

@@ -1,23 +1,19 @@
-import type { JSX, SyntheticEvent } from "react";
-import { useRef, useState } from "react";
+import type {JSX, SyntheticEvent} from "react";
+import {useRef, useState} from "react";
 import "./DeviceListModal.css";
-import type { CameraKind } from "../camera-view/CameraView.tsx";
-import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
-import {
-	appStreamDeviceId,
-	appStreamDeviceInfo,
-	devicesSelector,
-	selectDeviceWindow,
-} from "./devicesSlice.ts";
-import { mainCameraSelector, setCamera, smallCameraSelector } from "../camera-view/cameraViewsSlice.ts";
-import { closestTarget } from "../../utils/event-utils.ts";
+import type {CameraKind} from "../camera-view/CameraView.tsx";
+import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
+import {appStreamDeviceId, appStreamDeviceInfo, devicesSelector, selectDeviceWindow,} from "./devicesSlice.ts";
+import {mainCameraSelector, setCamera, smallCameraSelector} from "../camera-view/cameraViewsSlice.ts";
+import {closestTarget} from "../../utils/event-utils.ts";
 
 export type Props = {
 	// readonly onChange: (payload: Nullable<{camera: CameraKind, device: DeviceInfo}>) => Promise<void> | void;
 	readonly open: boolean;
-	readonly setIsModalOpen: (open: boolean) => void;
 	readonly className?: Nullable<string>;
 	readonly hasMultipleDevices?: boolean;
+	readonly isModalOpen: boolean;
+	readonly setIsModalOpen: (isOpen: boolean) => void;
 };
 
 const DeviceListModal = (opts: Props): JSX.Element => {
@@ -50,23 +46,10 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 	
 	const {
 		className,
-		open: isModalOpen,
-		setIsModalOpen: setIsModalOpenParent,
-		hasMultipleDevices
+		hasMultipleDevices,
+		isModalOpen,
+		setIsModalOpen,
 	} = opts;
-	
-	const setIsModalOpen = (v: boolean) => {
-		const dialog = dialogRef.current;
-		if (dialog == null) {
-			return;
-		}
-		if (v) {
-			dialog.open = true;
-		} else {
-			dialog.close("");
-		}
-		setIsModalOpenParent(v);
-	};
 	
 	const clearFocusOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		const target = e.target as HTMLElement;
@@ -86,8 +69,6 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 		}
 		setLastFocus(theFocus);
 	};
-	
-	setIsModalOpen(isModalOpen);
 	
 	const onCameraSelect = (camera: CameraKind, device: DeviceInfo) => {
 		dispatch(setCamera({
@@ -157,6 +138,7 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 			onFocus={() => {
 				(lastFocus ?? firstFocus.current as Nullable<HTMLElement>)?.focus();
 			}}
+			open={isModalOpen}
 			onBlur={onDialogBlur}
 			onKeyUp={onKey}
 			onKeyDown={onKey}
@@ -205,7 +187,7 @@ const DeviceListModal = (opts: Props): JSX.Element => {
 				  </form>
 			  </div>
 		  </dialog>
-		  <div className={`modal-background`} onClick={closeModal}></div>
+		  <div className={`modal-background`} onClick={closeModal} style={isModalOpen ? {} : {display: "none"}}></div>
 	  </>
 	);
 };
