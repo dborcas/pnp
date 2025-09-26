@@ -1,4 +1,4 @@
-import { clearCamera as _clearCamera, setCamera as _setCamera } from "./cameraViewsSlice.ts";
+import { clearCamera as _clearCamera, setCamera as _setCamera, setDeviceValid } from "./cameraViewsSlice.ts";
 import { useEffect, useRef, useState } from "react";
 import {
 	appStreamDeviceId,
@@ -43,7 +43,7 @@ export const CameraView = (opts: CameraProps) => {
 	const clearCamera = () => {
 		dispatch(_clearCamera(kind));
 		setHasSource(false);
-		
+		deviceValid(false);
 		const video = videoRef.current;
 		if (!video) {
 			return;
@@ -54,16 +54,30 @@ export const CameraView = (opts: CameraProps) => {
 		video.removeAttribute("src");
 		video.removeAttribute("srcObject");
 	};
+
+	const deviceValid = (valid: boolean) => {
+		dispatch(setDeviceValid({camera: kind, valid}));
+	}
 	
 	const changeSource = (camera: Nullable<MediaProvider>) => {
 		if (camera == null) {
+			deviceValid(false);
 			clearCamera();
 			return;
 		}
 		const video = videoRef.current;
 		if (video == null) {
+			deviceValid(false);
 			return;
 		}
+
+		const load = () => {
+			video.removeEventListener("loadeddata", load);
+			deviceValid(true);
+		}
+
+		video.addEventListener("loadeddata", load);
+
 		video.classList.remove("display-hidden");
 		video.srcObject = camera;
 		setHasSource(true);
@@ -103,7 +117,7 @@ export const CameraView = (opts: CameraProps) => {
 				//
 				// 	clearCamera();
 				// 	return;
-
+				deviceValid(false);
 				clearCamera();
 				return;
 			}
@@ -137,6 +151,7 @@ export const CameraView = (opts: CameraProps) => {
 			} else {
 				error = "Failed to get camera stream";
 			}
+			deviceValid(false);
 			clearCamera();
 			onError(error);
 			return;
@@ -147,6 +162,7 @@ export const CameraView = (opts: CameraProps) => {
 		}
 		video.classList.remove("display-hidden");
 		video.onerror = (event: Event | string) => {
+			deviceValid(false);
 			clearCamera();
 			if (typeof event === "string") {
 				onError(event);
@@ -154,6 +170,7 @@ export const CameraView = (opts: CameraProps) => {
 				onError("An unknown error occurred");
 			}
 		};
+
 		changeSource(mediaStreamRef);
 	};
 	

@@ -15,6 +15,11 @@ declare type CameraKind = "main" | "small"
 
 declare type CameraShape = "rect" | "circle";
 
+declare type DeviceValid = {
+	camera: CameraKind;
+	valid: boolean;
+}
+
 declare type SmallCameraSlice = {
 	showSmallCamera: boolean;
 	smallCameraShape: CameraShape;
@@ -28,6 +33,7 @@ declare type DeviceInfo = {
 	label: string;
 	tick?: number;
 	flipped?: boolean;
+	deviceValid?: boolean;
 }
 
 declare type AppStream = {

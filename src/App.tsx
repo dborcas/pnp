@@ -5,6 +5,7 @@ import {
 	clearCamera,
 	hasMainCameraSelector,
 	hasSwappableCamerasSelector,
+	hasValidCameraSelector,
 	mainCameraSelector,
 	refreshLoadedCameras,
 	setCamera,
@@ -30,7 +31,7 @@ export const App = () => {
 	const showControls = useAppSelector(showControlsSelector);
 	const hasSwappableCameras = useAppSelector(hasSwappableCamerasSelector);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
+	const hasValidCamera = useAppSelector(hasValidCameraSelector)
 
 	useEffect(() => {
 		console.log(`Loaded: ${(++loaded).toString()}`);
@@ -189,7 +190,7 @@ export const App = () => {
 		  <DeviceListModal
 			open={true}
 			hasMultipleDevices={multiCamera}
-			isModalOpen={isModalOpen}
+			isModalOpen={isModalOpen || !hasValidCamera}
 			setIsModalOpen={setIsModalOpen}
 		  />
 	</div>;

@@ -21,6 +21,7 @@ export const appStreamDeviceInfo = {
 	label: "App Window",
 	flipped: false,
 	tick: 0,
+	deviceValid: false,
 } satisfies DeviceInfo
 
 let streamIndex = 0;
