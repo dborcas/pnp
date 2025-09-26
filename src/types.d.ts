@@ -49,6 +49,6 @@ declare type CameraCapture = {
 	height: number;
 }
 
-interface RegExpConstructor {
+type RegExpConstructor = {
 	escape: (string: string) => string;
 }
