@@ -73,6 +73,17 @@ export const camerasSlice = createAppSlice({
                 return state;
             }),
 
+            setDeviceValid: create.reducer<DeviceValid>((state, action) => {
+                if (action.payload.camera === "main") {
+                    if (state.mainCamera) {
+                        state.mainCamera.deviceValid = action.payload.valid;
+                    }
+                } else  if (state.smallCamera != null) {
+                    state.smallCamera.deviceValid = action.payload.valid;
+                }
+                return state;
+            }),
+
             setCameras: create.reducer(
                 (state, action: PayloadAction<{ small?: DeviceInfo, main?: DeviceInfo }>) => {
                     state.mainCamera = action.payload.main ?? state.mainCamera;
@@ -105,6 +116,7 @@ export const camerasSlice = createAppSlice({
         hasSwappableCameras: (state: CamerasSliceState) => state.mainCamera?.deviceId != null && state.mainCamera.deviceId !== state.smallCamera?.deviceId,
         hasMainCamera: (state: CamerasSliceState) => state.mainCamera != null,
         hasSmallCamera: (state: CamerasSliceState) => state.smallCamera != null,
+        hasValidCamera: (state: CamerasSliceState) => state.mainCamera?.deviceValid === true,
     },
 });
 
@@ -116,6 +128,7 @@ export const {
     hasSmallCamera: hasSmallCameraSelector,
     showControls: showControlsSelector,
     hasSwappableCameras: hasSwappableCamerasSelector,
+    hasValidCamera: hasValidCameraSelector,
 } = camerasSlice.selectors;
 
 
@@ -125,6 +138,7 @@ export const {
     refreshLoadedCameras,
     toggleCameraControls,
     swapCameras,
+    setDeviceValid,
 } = camerasSlice.actions;
 
 const modifiers = (camera: CameraKind) => {
