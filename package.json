@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && mv docs/assets/worker.js docs/worker.js",
     "dev": "vite",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "start": "vite",
     "test": "vitest --run",
-    "type-check": "tsc -b --noEmit"
+    "type-check": "tsc -b --noEmit",
+    "serve": "npm run build && http-server docs -s --no-dotfiles"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
