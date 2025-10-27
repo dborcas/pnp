@@ -2,7 +2,9 @@
 export default function loadCacheWorker() {
     if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-            navigator.serviceWorker.register("assets/worker.js")
+            navigator.serviceWorker.register("worker.js?v=202510270910", {
+                scope: "/"
+            })
                 .then(registration => {
                     console.log("Service Worker registered with scope:", registration.scope);
                 })

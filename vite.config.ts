@@ -11,7 +11,7 @@ export default defineConfig({
         open: true,
     },
     build: {
-        minify: "terser",
+        minify: false,
         emptyOutDir: true,
         outDir: "docs",
         rollupOptions: {
