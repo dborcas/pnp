@@ -118,12 +118,14 @@
     height: fit-content;
     right: 0;
     top: 0;
-    z-index: 300;
+    z-index: 301;
     margin-right:1em;
     margin-top: 0.5em;
+    opacity: 0;
 }
 
 .App .device-buttons:focus-within,
+.App .device-buttons:hover,
 .App .device-buttons:hover button,
 .App .device-buttons button:hover  {
     opacity: 1 !important;
