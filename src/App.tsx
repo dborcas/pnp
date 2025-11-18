@@ -33,6 +33,7 @@ export const App = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const hasValidCamera = useAppSelector(hasValidCameraSelector);
     const [drawingEnabled, setDrawingEnabled] = useState(false);
+	const canvasId = "main-canvas";
 
 	useEffect(() => {
 		console.log(`Loaded: ${(++loaded).toString()}`);
@@ -188,7 +189,7 @@ export const App = () => {
 	// 		<button
 	// 			className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls`}
 	// 			onClick={() => {
-	// 				window.dispatchEvent(new CustomEvent("ClearCanvas"))
+	// 				window.dispatchEvent(new CustomEvent("ClearCanvas", {default: {id: canvasId}))
 	// 			}}
 	// 		>
 	// 			<span className={`material-symbols-outlined button-icon`}>
@@ -214,6 +215,7 @@ export const App = () => {
 			showToolbars={showControls}
 			drawingEnabled={drawingEnabled}
 			setDrawingEnabled={setDrawingEnabled}
+			canvasId={canvasId}
 		/>
 
 		{multiCamera ?

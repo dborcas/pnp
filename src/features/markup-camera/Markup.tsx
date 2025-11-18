@@ -8,6 +8,7 @@ export type MarkupProps = {
     strokeWidth?: Nullable<number>;
     enabled: boolean;
     brushScale?: number;
+    canvasId: string;
 };
 
 
@@ -15,7 +16,12 @@ export default function Markup(props: MarkupProps) {
     const canvas = createRef<HTMLCanvasElement>();
     const [undoableCanvas] = useState(createUndoableCanvas());
     const {width, height} = props.size;
-    const {strokeColor: strokeColor, strokeWidth: strokeWidth, enabled} = props;
+    const {
+        strokeColor: strokeColor,
+        strokeWidth: strokeWidth,
+        canvasId,
+        enabled
+    } = props;
     const brushScale = props.brushScale ?? 1;
     if (strokeWidth != null || strokeColor != null) {
         undoableCanvas?.setStroke({color: strokeColor, width: strokeWidth});
@@ -35,7 +41,11 @@ export default function Markup(props: MarkupProps) {
         const unregister =  undoCanvas.setCanvas(canvas.current);
 
 
-        const clearCanvas = () => {
+        const clearCanvas = (e: Event) => {
+            const targetId = (((e as unknown) as CustomEvent<Nullable<Partial<{id?: string}>>>)).detail?.id;
+            if (targetId != null && targetId !== canvasId) {
+                return;
+            }
             console.log("clearing UndoableCanvas");
             undoCanvas.clear();
             console.log("UndoableCanvas was cleared");

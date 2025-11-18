@@ -12,6 +12,7 @@ export type MarkupCameraProps = {
     showToolbars: boolean;
     drawingEnabled: boolean;
     setDrawingEnabled: (enabled: boolean) => void;
+    canvasId: string;
 };
 
 const MAX_ZOOM = 10;
@@ -33,7 +34,6 @@ const getCachedStrokeWidth = (): number | null => {
 };
 
 export function MarkupCamera(props: MarkupCameraProps) {
-
     const width = window.innerWidth;
     const height = window.innerHeight;
     const [strokeColor, _setStrokeColor] = useState(localStorage.getItem("pnp.stroke.color") ?? DEFAULT_STROKE_COLOR);
@@ -43,6 +43,7 @@ export function MarkupCamera(props: MarkupCameraProps) {
     const [aspectRatio, setAspectRatio] = useState(width / height);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const colorButtonRef = useRef<HTMLInputElement | null>(null);
+
     const {
         mainCamera,
         setMainCamera,
@@ -79,6 +80,10 @@ export function MarkupCamera(props: MarkupCameraProps) {
         _setZoom(zoom);
 
     };
+
+    const clearCanvas = useCallback(() => {
+        window.dispatchEvent(new CustomEvent("ClearCanvas", { bubbles: true, detail: {id: props.canvasId} }));
+    },[props.canvasId])
 
     useLayoutEffect(() => {
         const style: CSSProperties = {};
@@ -135,7 +140,7 @@ export function MarkupCamera(props: MarkupCameraProps) {
             }
             if ((e.shiftKey && e.key === "c") || (!e.ctrlKey && !e.metaKey && e.key === "C")) {
                 ran();
-                window.dispatchEvent(new Event("ClearCanvas"));
+                clearCanvas();
             } else if (e.metaKey || e.ctrlKey) {
                 if (e.key === "_" || e.key === "-") {
                     ran();
@@ -188,12 +193,13 @@ export function MarkupCamera(props: MarkupCameraProps) {
             window.removeEventListener("keydown", onKey);
             window.removeEventListener("wheel", onWheel);
         };
-    }, [setStrokeWidth, _zoom, strokeWidth, setDrawingEnabled, drawingEnabled]);
+    }, [setStrokeWidth, _zoom, strokeWidth, setDrawingEnabled, drawingEnabled, clearCanvas]);
+
 
     const toolbar = <div className={`markup-camera-toolbar ${(showToolbars && drawingEnabled) ? "" : "hidden"}`}>
 
         <label className="inline-input-field color-control">
-            <button><span className="material-symbols-outlined">edit_off</span></button>
+            <button onClick={clearCanvas}><span className="material-symbols-outlined">edit_off</span></button>
         </label>
         <label className="inline-input-field stroke-width-control">
             <span>Thickness: </span>
@@ -250,6 +256,7 @@ export function MarkupCamera(props: MarkupCameraProps) {
             <Markup size={{width, height}} strokeColor={strokeColor} strokeWidth={strokeWidth}
                     enabled={props.drawingEnabled}
                     brushScale={1 / (1 + _zoom / 10.0)}
+                    canvasId={props.canvasId}
             />
         </div>
     </div>;
