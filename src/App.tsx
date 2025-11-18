@@ -1,5 +1,4 @@
 import "./App.css";
-import {CameraView} from "./features/camera-view/CameraView.tsx";
 import {useAppDispatch, useAppSelector} from "./app/hooks.ts";
 import {
 	clearCamera,
@@ -19,6 +18,7 @@ import {SmallCameraView} from "./features/small-camera/SmallCameraView.tsx";
 import {devicesSelector, refreshDevices, setDevices} from "./features/device-list-modal/devicesSlice.ts";
 import DeviceListModal from "./features/device-list-modal/DeviceListModal.tsx";
 import {isMultiCameraAllowed} from "./utils/allowMulticamera.ts";
+import { MarkupCamera } from "./features/markup-camera/MarkupCamera.tsx";
 
 let loaded = 0;
 
@@ -31,7 +31,8 @@ export const App = () => {
 	const showControls = useAppSelector(showControlsSelector);
 	const hasSwappableCameras = useAppSelector(hasSwappableCamerasSelector);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const hasValidCamera = useAppSelector(hasValidCameraSelector)
+	const hasValidCamera = useAppSelector(hasValidCameraSelector);
+    const [drawingEnabled, setDrawingEnabled] = useState(false);
 
 	useEffect(() => {
 		console.log(`Loaded: ${(++loaded).toString()}`);
@@ -166,18 +167,53 @@ export const App = () => {
 			: <></>
 	);
 
+    const drawButton = (
+        hasAnyDevice ?
+            <button
+                className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls ${drawingEnabled ? "active" : ""}`}
+                onClick={() => {
+                    setDrawingEnabled(!drawingEnabled);
+                }}
+            >
+				<span className={`material-symbols-outlined button-icon`}>
+				  draw
+				</span>
+            </button>
+            : <></>
+    );
+
+
+	// const clearButton = (
+	// 	hasAnyDevice ?
+	// 		<button
+	// 			className={`open-device-list-button app-icon-button icon-button hide-on-hide-controls`}
+	// 			onClick={() => {
+	// 				window.dispatchEvent(new CustomEvent("ClearCanvas"))
+	// 			}}
+	// 		>
+	// 			<span className={`material-symbols-outlined button-icon`}>
+	// 			  edit_off
+	// 			</span>
+	// 		</button>
+	// 		: <></>
+	// );
+
+
 	return <div className={`App ${showControls ? "" : "hide-controls"}`}>
 		<div className={`device-buttons`}>
 			{devicesButton}
 			{swapCameraButton}
+			{drawButton}
+			{/*{clearButton}*/}
 		</div>
 
-		<CameraView
-		  camera={mainCamera}
-		  kind={"main"}
-		  onError={onErrorToast}
-		  onCameraChange={setMainCamera}
-		  isFallbackCamera={!hasMainCamera}
+		<MarkupCamera
+			mainCamera={mainCamera}
+			setMainCamera={setMainCamera}
+			hasMainCamera={hasMainCamera}
+			showToolbars={showControls}
+			drawingEnabled={drawingEnabled}
+			setDrawingEnabled={setDrawingEnabled}
 		/>
 
 		{multiCamera ?

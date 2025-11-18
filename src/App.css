@@ -118,7 +118,7 @@
     height: fit-content;
     right: 0;
     top: 0;
-    z-index: 2;
+    z-index: 300;
     margin-right:1em;
     margin-top: 0.5em;
 }
@@ -145,10 +145,18 @@
     align-items: center;
     margin: 0 0 0.5em;
 }
+
 .icon-button:hover {
     background: rgba(0,0,0,0.8);
     color: #EEEEEE;
 }
+
+
+.icon-button:hover, .icon-button.active {
+    background: rgba(255,255,255,0.8);
+    color: #333333;
+}
+
 
 .icon-button:active {
     background: rgba(255,255,255,0.4);

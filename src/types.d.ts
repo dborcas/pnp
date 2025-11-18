@@ -34,6 +34,7 @@ declare type DeviceInfo = {
 	tick?: number;
 	flipped?: boolean;
 	deviceValid?: boolean;
+	aspectRatio?: number;
 }
 
 declare type AppStream = {
