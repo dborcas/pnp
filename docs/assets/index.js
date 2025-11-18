@@ -18815,7 +18815,12 @@ function Markup(props) {
   const canvas = reactExports.createRef();
   const [undoableCanvas] = reactExports.useState(createUndoableCanvas());
   const { width, height } = props.size;
-  const { strokeColor, strokeWidth, enabled } = props;
+  const {
+    strokeColor,
+    strokeWidth,
+    canvasId,
+    enabled
+  } = props;
   const brushScale = props.brushScale ?? 1;
   if (strokeWidth != null || strokeColor != null) {
     undoableCanvas == null ? void 0 : undoableCanvas.setStroke({ color: strokeColor, width: strokeWidth });
@@ -18831,7 +18836,12 @@ function Markup(props) {
       return;
     }
     const unregister = undoCanvas.setCanvas(canvas.current);
-    const clearCanvas = () => {
+    const clearCanvas = (e) => {
+      var _a2;
+      const targetId = (_a2 = e.detail) == null ? void 0 : _a2.id;
+      if (targetId != null && targetId !== canvasId) {
+        return;
+      }
       console.log("clearing UndoableCanvas");
       undoCanvas.clear();
       console.log("UndoableCanvas was cleared");
@@ -18923,6 +18933,9 @@ function MarkupCamera(props) {
     }
     _setZoom(zoom);
   };
+  const clearCanvas = reactExports.useCallback(() => {
+    window.dispatchEvent(new CustomEvent("ClearCanvas", { bubbles: true, detail: { id: props.canvasId } }));
+  }, [props.canvasId]);
   reactExports.useLayoutEffect(() => {
     const style2 = {};
     if (_zoom === 0) {
@@ -18971,7 +18984,7 @@ function MarkupCamera(props) {
       };
       if (e.shiftKey && e.key === "c" || !e.ctrlKey && !e.metaKey && e.key === "C") {
         ran();
-        window.dispatchEvent(new Event("ClearCanvas"));
+        clearCanvas();
       } else if (e.metaKey || e.ctrlKey) {
         if (e.key === "_" || e.key === "-") {
           ran();
@@ -19021,9 +19034,9 @@ function MarkupCamera(props) {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("wheel", onWheel);
     };
-  }, [setStrokeWidth, _zoom, strokeWidth, setDrawingEnabled, drawingEnabled]);
+  }, [setStrokeWidth, _zoom, strokeWidth, setDrawingEnabled, drawingEnabled, clearCanvas]);
   const toolbar = /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `markup-camera-toolbar ${showToolbars && drawingEnabled ? "" : "hidden"}`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "inline-input-field color-control", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "edit_off" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "inline-input-field color-control", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: clearCanvas, children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "edit_off" }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field stroke-width-control", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Thickness: " }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "range", min: "2", max: MAX_STROKE_WIDTH, value: strokeWidth, onChange: (e) => {
@@ -19088,7 +19101,8 @@ function MarkupCamera(props) {
           strokeColor,
           strokeWidth,
           enabled: props.drawingEnabled,
-          brushScale: 1 / (1 + _zoom / 10)
+          brushScale: 1 / (1 + _zoom / 10),
+          canvasId: props.canvasId
         }
       )
     ] })
@@ -19105,6 +19119,7 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = reactExports.useState(false);
   const hasValidCamera = useAppSelector(hasValidCameraSelector);
   const [drawingEnabled, setDrawingEnabled] = reactExports.useState(false);
+  const canvasId = "main-canvas";
   reactExports.useEffect(() => {
     console.log(`Loaded: ${(++loaded).toString()}`);
     const onLoadState = () => {
@@ -19232,7 +19247,8 @@ const App = () => {
         hasMainCamera,
         showToolbars: showControls,
         drawingEnabled,
-        setDrawingEnabled
+        setDrawingEnabled,
+        canvasId
       }
     ),
     multiCamera ? /* @__PURE__ */ jsxRuntimeExports.jsx(
