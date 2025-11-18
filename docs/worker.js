@@ -60,7 +60,7 @@ const urlsToCache = [
   "doc-cam-apple-touch-icon.png",
   "favicon.ico",
   "site.webmanifest",
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=cached,cameraswitch,close,no_photography,photo_camera,visibility,visibility_off"
+  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add,cached,cameraswitch,close,draw,edit_off,no_photography,photo_camera,remove,visibility,visibility_off"
 ];
 console.log("Loading service worker");
 self.addEventListener("install", (event) => {
