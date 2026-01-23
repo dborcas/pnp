@@ -1,17 +1,13 @@
 {
-  "id": "https://pnp.dborcas.com/",
+  "id": "pnp.dborcas.com",
   "name": "Doc Camera",
   "short_name": "DocCam",
+  "start_url": "https://pnp.dborcas.com",
+  "description": "Passes a device's camera output into a browser window",
   "icons": [
     {
-      "src": "doc-cam-app-icon-maskable-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "doc-cam-app-icon-maskable-256x256.png",
-      "sizes": "256x256",
+      "src": "doc-cam-app-icon-maskable-1024x1024.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
     },
@@ -22,25 +18,34 @@
       "purpose": "maskable"
     },
     {
-      "src": "doc-cam-app-icon-any-192x192.png",
-      "sizes": "192x192",
+      "src": "doc-cam-app-icon-monochrome-1024x1024.png",
+      "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     },
     {
-      "src": "doc-cam-app-icon-any-256x256.png",
-      "sizes": "256x256",
+      "src": "doc-cam-app-icon-monochrome-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     },
     {
       "src": "doc-cam-app-icon-any-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
+    },
+    {
+      "src": "doc-cam-app-icon-any-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "doc-cam-app-icon-any-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ],
   "theme_color": "#000000",
   "background_color": "#400e3c",
-  "display": "standalone",
+  "display": "standalone"
 }
