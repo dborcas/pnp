@@ -18,16 +18,22 @@
       "purpose": "maskable"
     },
     {
-      "src": "doc-cam-app-icon-monochrome-1024x1024.png",
-      "sizes": "1024x1024",
+      "src": "doc-cam-app-icon-maskable-256x256.png",
+      "sizes": "256x256",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "doc-cam-app-icon-monochrome-512x512.png",
-      "sizes": "512x512",
+      "src": "doc-cam-app-icon-maskable-192x192.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "doc-cam-app-icon-monochrome.svg",
+      "sizes": "1024x1024",
+      "type": "image/svg",
+      "purpose": "monochrome"
     },
     {
       "src": "doc-cam-app-icon-any-512x512.png",
