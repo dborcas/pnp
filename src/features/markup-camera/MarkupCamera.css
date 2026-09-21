@@ -10,6 +10,7 @@
     position: relative;
     min-width: 100%;
     min-height: 100%;
+    transform-origin: center center;
 }
 
 .markup-camera > * {
@@ -85,6 +86,15 @@
     padding: 1em;
 }
 
+.markup-camera-toolbar.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.markup-camera-toolbar:not(.hidden) {
+    opacity: 1;
+}
+
 .color-container {
     position: relative;
     overflow: hidden;
@@ -130,6 +140,27 @@
 
 .markup-camera-container.toolbar-vert .markup-camera-toolbar .stroke-width-control {
     display: none;
+}
+
+.markup-camera-container.toolbar-vert .markup-camera-toolbar .rotate-control {
+    flex-direction: column;
+}
+
+.markup-camera-container.toolbar-vert .markup-camera-toolbar .rotate-control .icon-button {
+    width: var(--device-list-icon-size, 4em);
+    height: var(--device-list-icon-size, 4em);
+    padding: 0;
+    margin: 0 0 0.5em;
+    background: rgba(0,0,0,0.4);
+}
+
+.markup-camera-container.toolbar-vert .markup-camera-toolbar .rotate-control .icon-button:hover {
+    background: rgba(255,255,255,0.8);
+    color: #333333;
+}
+
+.markup-camera-container.toolbar-vert .markup-camera-toolbar .rotate-control .button-icon {
+    font-size: 3em;
 }
 
 .markup-camera-container .markup-camera-toolbar .zoom-control button {

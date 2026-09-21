@@ -137,6 +137,7 @@ export const {
     clearCamera,
     refreshLoadedCameras,
     toggleCameraControls,
+    setShowControls,
     swapCameras,
     setDeviceValid,
 } = camerasSlice.actions;

@@ -8,11 +8,12 @@ import {
 	mainCameraSelector,
 	refreshLoadedCameras,
 	setCamera,
+	setShowControls,
 	showControlsSelector,
 	swapCameras,
 	toggleCameraControls,
 } from "./features/camera-view/cameraViewsSlice.ts";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {onErrorToast} from "./features/error/onerror.ts";
 import {SmallCameraView} from "./features/small-camera/SmallCameraView.tsx";
 import {devicesSelector, refreshDevices, setDevices} from "./features/device-list-modal/devicesSlice.ts";
@@ -33,12 +34,38 @@ export const App = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const hasValidCamera = useAppSelector(hasValidCameraSelector);
     const [drawingEnabled, setDrawingEnabled] = useState(false);
+	const controlsHideTimer = useRef<number | null>(null);
 	const canvasId = "main-canvas";
+
+	const clearControlsHideTimer = useCallback(() => {
+		if (controlsHideTimer.current == null) {
+			return;
+		}
+		window.clearTimeout(controlsHideTimer.current);
+		controlsHideTimer.current = null;
+	}, []);
+
+	const scheduleControlsHide = useCallback(() => {
+		clearControlsHideTimer();
+		controlsHideTimer.current = window.setTimeout(() => {
+			dispatch(setShowControls(false));
+			controlsHideTimer.current = null;
+		}, 2400);
+	}, [clearControlsHideTimer, dispatch]);
+
+	const brieflyShowControls = useCallback(() => {
+		dispatch(setShowControls(true));
+		scheduleControlsHide();
+	}, [dispatch, scheduleControlsHide]);
 
 	useEffect(() => {
 		console.log(`Loaded: ${(++loaded).toString()}`);
+		const mediaDevices = navigator.mediaDevices as MediaDevices | undefined;
 		const onLoadState = () => {
-			navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+			if (mediaDevices == null) {
+				return;
+			}
+			mediaDevices.getUserMedia({ audio: false, video: true })
 			  .then((stream) => {
 				  console.log(`"Device changed to: Stream[${stream.id}]`);
 			  })
@@ -54,16 +81,36 @@ export const App = () => {
 			  });
 			dispatch(refreshLoadedCameras());
 		};
-		navigator.mediaDevices.addEventListener("devicechange", onLoadState);
+		mediaDevices?.addEventListener("devicechange", onLoadState);
 		window.addEventListener("load", onLoadState);
 		document.addEventListener("load", onLoadState);
 		onLoadState();
 		return () => {
-			navigator.mediaDevices.removeEventListener("devicechange", onLoadState);
+			mediaDevices?.removeEventListener("devicechange", onLoadState);
 			window.removeEventListener("load", onLoadState);
 			document.removeEventListener("load", onLoadState);
 		};
 	}, [dispatch]);
+
+	useEffect(() => {
+		scheduleControlsHide();
+		return () => {
+			clearControlsHideTimer();
+		};
+	}, [clearControlsHideTimer, scheduleControlsHide]);
+
+	useEffect(() => {
+		const revealOnEdgeHover = (e: PointerEvent) => {
+			const revealHeight = window.innerHeight * 0.22;
+			if (e.clientY <= revealHeight || e.clientY >= window.innerHeight - revealHeight) {
+				brieflyShowControls();
+			}
+		};
+		window.addEventListener("pointermove", revealOnEdgeHover);
+		return () => {
+			window.removeEventListener("pointermove", revealOnEdgeHover);
+		};
+	}, [brieflyShowControls]);
 
 	const setMainCamera = (device: Nullable<DeviceInfo>) => {
 		if (device == null) {
@@ -116,30 +163,33 @@ export const App = () => {
 				dispatch(toggleCameraControls());
 			}
 		};
-		const click = (e: MouseEvent) => {
-			const video = (e.target as Nullable<HTMLElement>)?.closest("video");
-			if (video == null) {
+		const click = (e: PointerEvent) => {
+			const target = e.target as Nullable<HTMLElement>;
+			if (
+				target == null ||
+				target.closest(".markup-camera-toolbar") != null ||
+				target.closest(".device-buttons") != null ||
+				target.closest(".DeviceListModal") != null
+			) {
 				return;
 			}
 
-			const app = video.parentElement?.parentElement as Nullable<HTMLElement>;
+			const app = target.closest(".App");
 			if (app == null) {
 				return;
 			}
 			if (!app.classList.contains("App")) {
 				return;
 			}
-			e.preventDefault();
-			e.stopPropagation();
-			dispatch(toggleCameraControls());
+			brieflyShowControls();
 		};
 		window.addEventListener("keyup", keyup);
-		window.addEventListener("click", click);
+		window.addEventListener("pointerdown", click, true);
 		return () => {
 			window.removeEventListener("keyup", keyup);
-			window.removeEventListener("click", click);
+			window.removeEventListener("pointerdown", click, true);
 		};
-	}, [dispatch]);
+	}, [brieflyShowControls, dispatch]);
 	const multiCamera = isMultiCameraAllowed() && devices != null && devices.length > 1;
 	const hasAnyDevice = devices != null && devices.length > 0;
 	const swapCameraButton = (
@@ -201,7 +251,11 @@ export const App = () => {
 
 
 	return <div className={`App ${showControls ? "" : "hide-controls"}`}>
-		<div className={`device-buttons`}>
+		<div
+			className={`device-buttons`}
+			onPointerEnter={clearControlsHideTimer}
+			onPointerLeave={scheduleControlsHide}
+		>
 			{devicesButton}
 			{swapCameraButton}
 			{drawButton}
@@ -216,6 +270,8 @@ export const App = () => {
 			drawingEnabled={drawingEnabled}
 			setDrawingEnabled={setDrawingEnabled}
 			canvasId={canvasId}
+			onControlsPointerEnter={clearControlsHideTimer}
+			onControlsPointerLeave={scheduleControlsHide}
 		/>
 
 		{multiCamera ?
