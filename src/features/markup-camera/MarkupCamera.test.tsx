@@ -39,7 +39,15 @@ describe("MarkupCamera", () => {
 
     fireEvent.keyDown(window, { key: "0", metaKey: true });
 
+    const scrollArea = await screen.findByTestId("markup-camera-scroll-area");
     const camera = await screen.findByTestId("markup-camera-surface");
+    expect(scrollArea).toHaveStyle({ width: "1024px", height: "768px" });
     expect(camera).toHaveStyle({ transform: "rotate(90deg) scale(1)" });
+    expect(camera).toHaveStyle({
+      width: "768px",
+      height: "576px",
+      left: "128px",
+      top: "96px",
+    });
   });
 });

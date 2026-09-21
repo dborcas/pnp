@@ -105,7 +105,8 @@ export function MarkupCamera(props: MarkupCameraProps) {
   );
   const [_zoom, _setZoom] = useState(1.0);
   const [rotation, setRotation] = useState(getCachedRotation);
-  const [style, setStyle] = useState<CSSProperties>({});
+  const [scrollAreaStyle, setScrollAreaStyle] = useState<CSSProperties>({});
+  const [cameraStyle, setCameraStyle] = useState<CSSProperties>({});
   const [aspectRatio, setAspectRatio] = useState(width / height);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const colorButtonRef = useRef<HTMLInputElement | null>(null);
@@ -168,10 +169,12 @@ export function MarkupCamera(props: MarkupCameraProps) {
   }, [props.canvasId]);
 
   useLayoutEffect(() => {
-    const style: CSSProperties = {};
+    const nextScrollAreaStyle: CSSProperties = {};
+    const nextCameraStyle: CSSProperties = {};
     const container = containerRef.current;
     if (container == null) {
-      setStyle({});
+      setScrollAreaStyle({});
+      setCameraStyle({});
       return;
     }
 
@@ -181,24 +184,23 @@ export function MarkupCamera(props: MarkupCameraProps) {
       aspectRatio,
       rotation,
     });
-    style.width = `${layout.width.toString()}px`;
-    style.height = `${layout.height.toString()}px`;
-
     const zoom = 1 + _zoom / 5;
-    style.transform = `rotate(${rotation.toString()}deg) scale(${zoom.toString()})`;
     const scaledWidth = zoom * layout.visualWidth;
-    const offsetX = (scaledWidth - width) / 2;
-    if (offsetX > 0) {
-      style.marginLeft = offsetX.toString() + "px";
-    }
     const scaledHeight = zoom * layout.visualHeight;
-    const offsetY = (scaledHeight - height) / 2;
-    if (offsetY > 0) {
-      style.marginTop = offsetY.toString() + "px";
-    }
+    const scrollWidth = Math.max(width, scaledWidth);
+    const scrollHeight = Math.max(height, scaledHeight);
 
-    setStyle(style);
-  }, [_zoom, width, height, setStyle, aspectRatio, rotation]);
+    nextScrollAreaStyle.width = `${scrollWidth.toString()}px`;
+    nextScrollAreaStyle.height = `${scrollHeight.toString()}px`;
+    nextCameraStyle.width = `${layout.width.toString()}px`;
+    nextCameraStyle.height = `${layout.height.toString()}px`;
+    nextCameraStyle.left = `${((scrollWidth - layout.width) / 2).toString()}px`;
+    nextCameraStyle.top = `${((scrollHeight - layout.height) / 2).toString()}px`;
+    nextCameraStyle.transform = `rotate(${rotation.toString()}deg) scale(${zoom.toString()})`;
+
+    setScrollAreaStyle(nextScrollAreaStyle);
+    setCameraStyle(nextCameraStyle);
+  }, [_zoom, width, height, aspectRatio, rotation]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -388,27 +390,33 @@ export function MarkupCamera(props: MarkupCameraProps) {
     <div className="markup-camera-container toolbar-vert">
       {toolbar}
       <div
-        className="markup-camera"
-        data-testid="markup-camera-surface"
-        style={style}
+        className="markup-camera-scroll-area"
+        data-testid="markup-camera-scroll-area"
+        style={scrollAreaStyle}
         ref={containerRef}
       >
-        <CameraView
-          camera={mainCamera}
-          kind={"main"}
-          onError={onErrorToast}
-          onCameraChange={setMainCamera}
-          isFallbackCamera={!hasMainCamera}
-          setCameraAspectRatio={setAspectRatio}
-        />
-        <Markup
-          size={{ width, height }}
-          strokeColor={strokeColor}
-          strokeWidth={strokeWidth}
-          enabled={props.drawingEnabled}
-          brushScale={1 / (1 + _zoom / 10.0)}
-          canvasId={props.canvasId}
-        />
+        <div
+          className="markup-camera"
+          data-testid="markup-camera-surface"
+          style={cameraStyle}
+        >
+          <CameraView
+            camera={mainCamera}
+            kind={"main"}
+            onError={onErrorToast}
+            onCameraChange={setMainCamera}
+            isFallbackCamera={!hasMainCamera}
+            setCameraAspectRatio={setAspectRatio}
+          />
+          <Markup
+            size={{ width, height }}
+            strokeColor={strokeColor}
+            strokeWidth={strokeWidth}
+            enabled={props.drawingEnabled}
+            brushScale={1 / (1 + _zoom / 10.0)}
+            canvasId={props.canvasId}
+          />
+        </div>
       </div>
     </div>
   );
