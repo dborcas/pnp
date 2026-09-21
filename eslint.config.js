@@ -1,9 +1,9 @@
-import js from "@eslint/js"
-import vitestPlugin from "@vitest/eslint-plugin"
-import prettierConfig from "eslint-config-prettier/flat"
-import reactHooksPlugin from "eslint-plugin-react-hooks"
-import globals from "globals"
-import { config, configs } from "typescript-eslint"
+import js from "@eslint/js";
+import vitestPlugin from "@vitest/eslint-plugin";
+import prettierConfig from "eslint-config-prettier/flat";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import globals from "globals";
+import { config, configs } from "typescript-eslint";
 
 const eslintConfig = config(
   {
@@ -18,6 +18,8 @@ const eslintConfig = config(
       "**/.tmp/",
       "**/.yarn/",
       "**/coverage/",
+      "**/docs/",
+      "src-worker/isInWorkerContext.js",
     ],
   },
   {
@@ -37,7 +39,11 @@ const eslintConfig = config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        projectService: true,
+        project: [
+          "./tsconfig.app.json",
+          "./tsconfig.node.json",
+          "./tsconfig.worker.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -74,6 +80,6 @@ const eslintConfig = config(
   },
 
   prettierConfig,
-)
+);
 
-export default eslintConfig
+export default eslintConfig;
