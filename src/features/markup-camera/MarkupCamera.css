@@ -7,8 +7,13 @@
   box-sizing: border-box;
 }
 .markup-camera {
-  position: relative;
+  position: absolute;
   transform-origin: center center;
+}
+
+.markup-camera canvas {
+  display: block;
+  touch-action: none;
 }
 
 .markup-camera-scroll-area {

@@ -107,6 +107,7 @@ export function MarkupCamera(props: MarkupCameraProps) {
   const [rotation, setRotation] = useState(getCachedRotation);
   const [scrollAreaStyle, setScrollAreaStyle] = useState<CSSProperties>({});
   const [cameraStyle, setCameraStyle] = useState<CSSProperties>({});
+  const [markupSize, setMarkupSize] = useState<Size>({ width, height });
   const [aspectRatio, setAspectRatio] = useState(width / height);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const colorButtonRef = useRef<HTMLInputElement | null>(null);
@@ -198,6 +199,10 @@ export function MarkupCamera(props: MarkupCameraProps) {
     nextCameraStyle.top = `${((scrollHeight - layout.height) / 2).toString()}px`;
     nextCameraStyle.transform = `rotate(${rotation.toString()}deg) scale(${zoom.toString()})`;
 
+    setMarkupSize({
+      width: Math.round(layout.width),
+      height: Math.round(layout.height),
+    });
     setScrollAreaStyle(nextScrollAreaStyle);
     setCameraStyle(nextCameraStyle);
   }, [_zoom, width, height, aspectRatio, rotation]);
@@ -409,7 +414,7 @@ export function MarkupCamera(props: MarkupCameraProps) {
             setCameraAspectRatio={setAspectRatio}
           />
           <Markup
-            size={{ width, height }}
+            size={markupSize}
             strokeColor={strokeColor}
             strokeWidth={strokeWidth}
             enabled={props.drawingEnabled}

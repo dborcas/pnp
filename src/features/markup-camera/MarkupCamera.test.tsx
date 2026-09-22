@@ -35,7 +35,7 @@ describe("MarkupCamera", () => {
 
   test("keeps rotation when command zero resets zoom", async () => {
     localStorage.setItem("pnp.camera.rotation", "90");
-    renderMarkupCamera();
+    const { container } = renderMarkupCamera();
 
     fireEvent.keyDown(window, { key: "0", metaKey: true });
 
@@ -49,5 +49,9 @@ describe("MarkupCamera", () => {
       left: "128px",
       top: "96px",
     });
+    const canvas = container.querySelector("canvas");
+    expect(canvas).not.toBeNull();
+    expect(canvas?.width).toBe(768);
+    expect(canvas?.height).toBe(576);
   });
 });

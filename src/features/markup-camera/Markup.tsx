@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createUndoableCanvas } from "../canvas/UndoableCanvas.tsx";
 
 export type MarkupProps = {
@@ -11,7 +11,7 @@ export type MarkupProps = {
 };
 
 export default function Markup(props: MarkupProps) {
-  const canvas = createRef<HTMLCanvasElement>();
+  const canvas = useRef<HTMLCanvasElement | null>(null);
   const [undoableCanvas] = useState(createUndoableCanvas());
   const { width, height } = props.size;
   const {
@@ -55,7 +55,7 @@ export default function Markup(props: MarkupProps) {
       unregister();
       window.removeEventListener("ClearCanvas", clearCanvas);
     };
-  }, [undoableCanvas, canvas, canvasId]);
+  }, [undoableCanvas, canvasId, width, height]);
 
   useEffect(() => {
     const undoCanvas = undoableCanvas;
