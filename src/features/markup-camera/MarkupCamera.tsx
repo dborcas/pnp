@@ -420,6 +420,8 @@ export function MarkupCamera(props: MarkupCameraProps) {
             enabled={props.drawingEnabled}
             brushScale={1 / (1 + _zoom / 10.0)}
             canvasId={props.canvasId}
+            rotation={rotation}
+            cssZoom={1 + _zoom / 5}
           />
         </div>
       </div>

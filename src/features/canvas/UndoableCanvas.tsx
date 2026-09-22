@@ -11,6 +11,7 @@ export type UndoableCanvas = {
   clear(): void;
   setEnabled(enable?: boolean): void;
   setBrushScale(zoom: number): void;
+  setCoordTransform(rotation: number, cssZoom: number): void;
 };
 
 type Movement = {
@@ -36,18 +37,43 @@ export const getCanvasPoint = (props: CanvasPointProps): Movement => {
   };
 };
 
-const getCanvasPointerPoint = (e: PointerEvent): Movement => {
-  return getCanvasPoint({
-    offsetX: e.offsetX,
-    offsetY: e.offsetY,
-  });
-};
-
 export function createUndoableCanvas(
   canvas?: HTMLCanvasElement,
 ): Nullable<UndoableCanvas> {
   let _ctx: Nullable<CanvasRenderingContext2D> = null;
   let _enabled = false;
+  let _canvasEl: Nullable<HTMLCanvasElement> = null;
+  let _rotation = 0;
+  let _cssZoom = 1.0;
+
+  // Converts a pointer event to canvas pixel coordinates by inverting the
+  // parent's rotate(rotation) scale(cssZoom) CSS transform. Using
+  // clientX/clientY + getBoundingClientRect is reliable across browsers
+  // where offsetX/offsetY can diverge from the canvas pixel space when
+  // ancestor CSS transforms are present.
+  const getCanvasPointerPoint = (e: PointerEvent): Movement => {
+    const canvasEl = _canvasEl;
+    if (canvasEl == null) {
+      return { x: e.offsetX, y: e.offsetY };
+    }
+    const rect = canvasEl.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      return { x: e.offsetX, y: e.offsetY };
+    }
+    const cx = (rect.left + rect.right) / 2;
+    const cy = (rect.top + rect.bottom) / 2;
+    const vx = e.clientX - cx;
+    const vy = e.clientY - cy;
+    const rad = _rotation * (Math.PI / 180);
+    const cosR = Math.cos(rad);
+    const sinR = Math.sin(rad);
+    const lx = (vx * cosR + vy * sinR) / _cssZoom;
+    const ly = (-vx * sinR + vy * cosR) / _cssZoom;
+    return {
+      x: lx + canvasEl.width / 2,
+      y: ly + canvasEl.height / 2,
+    };
+  };
   const enabled = () => _enabled && _ctx != null;
   let isDrawing = false;
   let activePointerId: Nullable<number> = null;
@@ -230,6 +256,7 @@ export function createUndoableCanvas(
   };
 
   const setCanvas = (canvas: HTMLCanvasElement): (() => void) => {
+    _canvasEl = canvas;
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
     unregisterCanvasListeners();
@@ -278,6 +305,10 @@ export function createUndoableCanvas(
     setBrushScale(zoom: number): void {
       _brushScale = zoom;
       render(undoStack);
+    },
+    setCoordTransform(rotation: number, cssZoom: number): void {
+      _rotation = rotation;
+      _cssZoom = cssZoom;
     },
   } satisfies UndoableCanvas;
 }

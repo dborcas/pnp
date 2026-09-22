@@ -8,6 +8,8 @@ export type MarkupProps = {
   enabled: boolean;
   brushScale?: number;
   canvasId: string;
+  rotation?: number;
+  cssZoom?: number;
 };
 
 export default function Markup(props: MarkupProps) {
@@ -64,6 +66,10 @@ export default function Markup(props: MarkupProps) {
     }
     undoCanvas.setBrushScale(brushScale);
   }, [brushScale, undoableCanvas]);
+
+  useEffect(() => {
+    undoableCanvas?.setCoordTransform(props.rotation ?? 0, props.cssZoom ?? 1);
+  }, [props.rotation, props.cssZoom, undoableCanvas]);
 
   useEffect(() => {
     const canvas = undoableCanvas;
