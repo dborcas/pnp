@@ -1,4 +1,3 @@
-/*! Build Date: 2026-09-22T15:25:44.864Z */
 .App {
     text-align: center;
     background: #000;
@@ -123,10 +122,8 @@
     margin-right:1em;
     margin-top: 0.5em;
     opacity: 0;
-    transition: opacity 1s;
 }
 
-.App:not(.hide-controls) .device-buttons,
 .App .device-buttons:focus-within,
 .App .device-buttons:hover,
 .App .device-buttons:hover button,
@@ -173,7 +170,6 @@
     vertical-align: middle;
     text-align: center;
 }
-
 .Camera {
     width: 100%;
     height: 100%;
@@ -402,196 +398,145 @@
 }
 
 .markup-camera-container {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  --webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    --webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
 }
 .markup-camera {
-  position: absolute;
-  transform-origin: center center;
-}
-
-.markup-camera canvas {
-  display: block;
-  touch-action: none;
-}
-
-.markup-camera-scroll-area {
-  position: relative;
-  min-width: 100%;
-  min-height: 100%;
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .markup-camera > * {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
 }
 
 .zoom-button {
-  appearance: none;
-  -webkit-appearance: none;
-  border: none;
-  background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
 }
 .zoom-button span {
-  color: #ffffff;
+    color: #FFFFFF;
 }
 
 .zoom-slider {
-  width: 10em;
+    width: 10em;
 }
 
 .inline-input-field {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .inline-input-field > span {
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
 .inline-input-field > span::after {
-  content: ":";
+    content:":";
 }
 .inline-input-field button {
-  appearance: none;
-  -webkit-appearance: none;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 1em;
-  color: #ffffff;
-  width: 1.5em;
-  height: 1.5em;
-  padding: 4px;
-  margin-bottom: 1em;
-  border-radius: 1.5em;
-  box-sizing: content-box;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1em;
+    color: #FFFFFF;
+    width: 1.5em;
+    height: 1.5em;
+    padding: 4px;
+    margin-bottom: 1em;
+    border-radius: 1.5em;
+    box-sizing: content-box;
 }
 
 .inline-input-field button:active {
-  background: #ffffff;
-  color: #333333;
+    background: #FFFFFF;
+    color: #333333;
 }
 
 .markup-camera-toolbar {
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 1s;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  padding: 1em;
-}
-
-.markup-camera-toolbar.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.markup-camera-toolbar:not(.hidden) {
-  opacity: 1;
+    position:fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 1s;
+    background: rgba(0,0,0,0.7);
+    color: #FFF;
+    padding: 1em;
 }
 
 .color-container {
-  position: relative;
-  overflow: hidden;
-  border: 2px solid #fff;
-  border-radius: 1em;
-  width: 1.5em;
-  height: 1.5em;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #FFF;
+    border-radius: 1em;
+    width: 1.5em;
+    height: 1.5em;
 }
 
 .color-container input {
-  width: 4em;
-  height: 4em;
-  position: absolute;
-  top: -1em;
-  left: -1em;
+    width: 4em;
+    height: 4em;
+    position: absolute;
+    top: -1em;
+    left: -1em;
 }
 
-.markup-camera-toolbar:hover,
-.markup-camera-toolbar:focus-within {
-  opacity: 1;
+.markup-camera-toolbar:hover, .markup-camera-toolbar:focus-within {
+    opacity: 1;
 }
+
 
 .markup-camera-container.toolbar-vert .inline-input-field > span {
-  position: fixed;
-  left: -10000%;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  display: block;
+    position: fixed;
+    left: -10000%;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    display: block;
+
 }
 
 .markup-camera-container.toolbar-vert .markup-camera-toolbar {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  flex-direction: column;
-  top: auto;
-  left: auto;
-  width: fit-content;
-  height: fit-content;
+    position: fixed;
+    right: 0;
+    bottom:0;
+    flex-direction: column;
+    top:auto;
+    left: auto;
+    width: fit-content;
+    height: fit-content;
 }
 
-.markup-camera-container.toolbar-vert
-  .markup-camera-toolbar
-  .stroke-width-control {
-  display: none;
-}
-
-.markup-camera-container.toolbar-vert .markup-camera-toolbar .rotate-control {
-  flex-direction: column;
-}
-
-.markup-camera-container.toolbar-vert
-  .markup-camera-toolbar
-  .rotate-control
-  .icon-button {
-  width: var(--device-list-icon-size, 4em);
-  height: var(--device-list-icon-size, 4em);
-  padding: 0;
-  margin: 0 0 0.5em;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.markup-camera-container.toolbar-vert
-  .markup-camera-toolbar
-  .rotate-control
-  .icon-button:hover {
-  background: rgba(255, 255, 255, 0.8);
-  color: #333333;
-}
-
-.markup-camera-container.toolbar-vert
-  .markup-camera-toolbar
-  .rotate-control
-  .button-icon {
-  font-size: 3em;
+.markup-camera-container.toolbar-vert .markup-camera-toolbar .stroke-width-control {
+    display: none;
 }
 
 .markup-camera-container .markup-camera-toolbar .zoom-control button {
-  color: #fff;
+    color: #FFF;
 }
 .markup-camera-container .markup-camera-toolbar .zoom-control {
-  display: none;
-}
-body {
+    display: none;
+}body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;

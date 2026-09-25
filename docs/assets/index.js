@@ -1,4 +1,3 @@
-/*! Build Date: 2026-09-22T15:25:44.864Z */
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -14954,7 +14953,6 @@ const {
   clearCamera,
   refreshLoadedCameras,
   toggleCameraControls,
-  setShowControls,
   swapCameras,
   setDeviceValid
 } = camerasSlice.actions;
@@ -18455,14 +18453,13 @@ const SmallCameraView = (opts) => {
 };
 const closestTarget = ({ target }, selector) => {
   if (target == null) {
-    return null;
+    return void 0;
   }
   const element = target;
   if (element.closest == void 0) {
-    return null;
+    return void 0;
   }
-  const closest = element.closest(selector);
-  return closest instanceof HTMLElement ? closest : null;
+  return element.closest(selector);
 };
 const DeviceListModal = (opts) => {
   const firstFocus = reactExports.useRef(null);
@@ -18479,23 +18476,20 @@ const DeviceListModal = (opts) => {
     dispatch(selectDeviceWindow()).then(() => {
       console.log("got app window");
       if (mainCameraDevice == null) {
-        dispatch(
-          setCamera({ camera: "main", device: appStreamDeviceInfo, devices })
-        );
+        dispatch(setCamera({ camera: "main", device: appStreamDeviceInfo, devices }));
       } else if (smallCameraDevice == null) {
-        dispatch(
-          setCamera({
-            camera: "small",
-            device: appStreamDeviceInfo,
-            devices
-          })
-        );
+        dispatch(setCamera({ camera: "small", device: appStreamDeviceInfo, devices }));
       }
     }).catch(() => {
       console.log("App window request rejected");
     });
   };
-  const { className, hasMultipleDevices, isModalOpen, setIsModalOpen } = opts;
+  const {
+    className,
+    hasMultipleDevices,
+    isModalOpen,
+    setIsModalOpen
+  } = opts;
   const clearFocusOnBlur = (e) => {
     const target = e.target;
     const closest = target.closest("[data-focusble]");
@@ -18514,13 +18508,11 @@ const DeviceListModal = (opts) => {
     setLastFocus(theFocus);
   };
   const onCameraSelect = (camera, device) => {
-    dispatch(
-      setCamera({
-        device,
-        devices,
-        camera
-      })
-    );
+    dispatch(setCamera({
+      device,
+      devices,
+      camera
+    }));
   };
   const getOption = (i, camera, device) => {
     var _a2;
@@ -18585,15 +18577,7 @@ const DeviceListModal = (opts) => {
         onKeyUp: onKey,
         onKeyDown: onKey,
         children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `container`, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: `close-button`,
-              ref: firstFocus,
-              onClick: closeModal,
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `material-symbols-outlined`, children: "close" })
-            }
-          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `close-button`, ref: firstFocus, onClick: closeModal, children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `material-symbols-outlined`, children: "close" }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit, ref: formRef, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -18603,21 +18587,14 @@ const DeviceListModal = (opts) => {
               ] }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: devices.map((device, i) => {
                 return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "td",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { "data-for": "device", id: `device-select-device-row-${i.toString()}-name`, children: device.deviceId === appStreamDeviceId ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
                     {
-                      "data-for": "device",
-                      id: `device-select-device-row-${i.toString()}-name`,
-                      children: device.deviceId === appStreamDeviceId ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          className: `request-app-window-stream-button`,
-                          onClick: requestAppWindow,
-                          children: "App Window"
-                        }
-                      ) : device.label
+                      className: `request-app-window-stream-button`,
+                      onClick: requestAppWindow,
+                      children: "App Window"
                     }
-                  ),
+                  ) : device.label }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { "data-for": "camera", children: getOption(i, "main", device) }),
                   hasMultipleDevices ? /* @__PURE__ */ jsxRuntimeExports.jsx("td", { "data-for": "camera", children: getOption(i, "small", device) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {})
                 ] }, `device-select-device-row-${i.toString()}`);
@@ -18628,14 +18605,7 @@ const DeviceListModal = (opts) => {
         ] })
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: `modal-background`,
-        onClick: closeModal,
-        style: isModalOpen ? {} : { display: "none" }
-      }
-    )
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `modal-background`, onClick: closeModal, style: isModalOpen ? {} : { display: "none" } })
   ] });
 };
 let _multiCameraAllowed = null;
@@ -18660,35 +18630,8 @@ const noOp = () => {
 function createUndoableCanvas(canvas) {
   let _ctx = null;
   let _enabled = false;
-  let _canvasEl = null;
-  let _rotation = 0;
-  let _cssZoom = 1;
-  const getCanvasPointerPoint = (e) => {
-    const canvasEl = _canvasEl;
-    if (canvasEl == null) {
-      return { x: e.offsetX, y: e.offsetY };
-    }
-    const rect = canvasEl.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      return { x: e.offsetX, y: e.offsetY };
-    }
-    const cx = (rect.left + rect.right) / 2;
-    const cy = (rect.top + rect.bottom) / 2;
-    const vx = e.clientX - cx;
-    const vy = e.clientY - cy;
-    const rad = _rotation * (Math.PI / 180);
-    const cosR = Math.cos(rad);
-    const sinR = Math.sin(rad);
-    const lx = (vx * cosR + vy * sinR) / _cssZoom;
-    const ly = (-vx * sinR + vy * cosR) / _cssZoom;
-    return {
-      x: lx + canvasEl.width / 2,
-      y: ly + canvasEl.height / 2
-    };
-  };
   const enabled = () => _enabled && _ctx != null;
   let isDrawing = false;
-  let activePointerId = null;
   let lastX = 0;
   let lastY = 0;
   let strokeColor = "#FF0000";
@@ -18700,32 +18643,21 @@ function createUndoableCanvas(canvas) {
   let currentPath = [];
   let unregisterCanvasListeners = noOp;
   let _brushScale = 1;
-  const canvasPointerDown = (e) => {
-    if (!enabled()) {
-      return;
-    }
-    e.preventDefault();
-    const canvas2 = e.currentTarget;
-    const point = getCanvasPointerPoint(e);
-    isDrawing = true;
-    activePointerId = e.pointerId;
-    canvas2.setPointerCapture(e.pointerId);
-    [lastX, lastY] = [point.x, point.y];
+  const canvasMouseDown = (e) => {
+    isDrawing = enabled();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
     redoStack.splice(0);
-    currentPath = [
-      {
-        x: lastX,
-        y: lastY,
-        width: strokeWidth,
-        color: strokeColor
-      }
-    ];
+    currentPath = [{
+      x: lastX,
+      y: lastY,
+      width: strokeWidth,
+      color: strokeColor
+    }];
   };
-  const canvasPointerMove = (e) => {
-    if (!isDrawing || e.pointerId !== activePointerId) {
+  const canvasMouseMove = (e) => {
+    if (!isDrawing) {
       return;
     }
-    e.preventDefault();
     const ctx = _ctx;
     if (ctx == null) {
       return;
@@ -18736,8 +18668,7 @@ function createUndoableCanvas(canvas) {
     });
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
-    const point = getCanvasPointerPoint(e);
-    [lastX, lastY] = [point.x, point.y];
+    [lastX, lastY] = [e.offsetX, e.offsetY];
     currentPath.push({
       x: lastX,
       y: lastY
@@ -18745,16 +18676,8 @@ function createUndoableCanvas(canvas) {
     ctx.lineTo(lastX, lastY);
     ctx.stroke();
   };
-  const canvasPointerUp = (e) => {
-    if (e.pointerId !== activePointerId) {
-      return;
-    }
-    const canvas2 = e.currentTarget;
-    if (canvas2.hasPointerCapture(e.pointerId)) {
-      canvas2.releasePointerCapture(e.pointerId);
-    }
+  const canvasMouseUp = () => {
     isDrawing = false;
-    activePointerId = null;
     if (currentPath.length === 0) {
       return;
     }
@@ -18833,21 +18756,18 @@ function createUndoableCanvas(canvas) {
     strokeColor = props.color ?? strokeColor;
   };
   const registerCanvasListeners = (canvas2) => {
-    canvas2.addEventListener("pointerdown", canvasPointerDown);
-    canvas2.addEventListener("pointermove", canvasPointerMove);
-    canvas2.addEventListener("pointerup", canvasPointerUp);
-    canvas2.addEventListener("pointercancel", canvasPointerUp);
+    canvas2.addEventListener("mousedown", canvasMouseDown);
+    canvas2.addEventListener("mousemove", canvasMouseMove);
+    canvas2.addEventListener("mouseup", canvasMouseUp);
     window.addEventListener("keydown", canvasKeyDown);
     return () => {
-      canvas2.removeEventListener("pointerdown", canvasPointerDown);
-      canvas2.removeEventListener("pointermove", canvasPointerMove);
-      canvas2.removeEventListener("pointerup", canvasPointerUp);
-      canvas2.removeEventListener("pointercancel", canvasPointerUp);
+      canvas2.removeEventListener("mousedown", canvasMouseDown);
+      canvas2.removeEventListener("mousemove", canvasMouseMove);
+      canvas2.removeEventListener("mouseup", canvasMouseUp);
       window.removeEventListener("keydown", canvasKeyDown);
     };
   };
   const setCanvas = (canvas2) => {
-    _canvasEl = canvas2;
     canvasWidth = canvas2.width;
     canvasHeight = canvas2.height;
     unregisterCanvasListeners();
@@ -18888,15 +18808,11 @@ function createUndoableCanvas(canvas) {
     setBrushScale(zoom) {
       _brushScale = zoom;
       render(undoStack);
-    },
-    setCoordTransform(rotation, cssZoom) {
-      _rotation = rotation;
-      _cssZoom = cssZoom;
     }
   };
 }
 function Markup(props) {
-  const canvas = reactExports.useRef(null);
+  const canvas = reactExports.createRef();
   const [undoableCanvas] = reactExports.useState(createUndoableCanvas());
   const { width, height } = props.size;
   const {
@@ -18935,7 +18851,7 @@ function Markup(props) {
       unregister();
       window.removeEventListener("ClearCanvas", clearCanvas);
     };
-  }, [undoableCanvas, canvasId, width, height]);
+  }, [undoableCanvas, canvas]);
   reactExports.useEffect(() => {
     const undoCanvas = undoableCanvas;
     if (undoCanvas == null) {
@@ -18943,9 +18859,6 @@ function Markup(props) {
     }
     undoCanvas.setBrushScale(brushScale);
   }, [brushScale, undoableCanvas]);
-  reactExports.useEffect(() => {
-    undoableCanvas == null ? void 0 : undoableCanvas.setCoordTransform(props.rotation ?? 0, props.cssZoom ?? 1);
-  }, [props.rotation, props.cssZoom, undoableCanvas]);
   reactExports.useEffect(() => {
     const canvas2 = undoableCanvas;
     if (canvas2 == null) {
@@ -18967,7 +18880,6 @@ const MAX_ZOOM = 10;
 const DEFAULT_STROKE_COLOR = "#FF0000";
 const DEFAULT_STROKE_WIDTH = 2;
 const MAX_STROKE_WIDTH = 12;
-const ROTATION_STORAGE_KEY = "pnp.camera.rotation";
 const getCachedStrokeWidth = () => {
   const cachedStrokeWidthString = localStorage.getItem("pnp.stroke.width");
   if (cachedStrokeWidthString == null || cachedStrokeWidthString.trim() === "") {
@@ -18979,52 +18891,13 @@ const getCachedStrokeWidth = () => {
     return null;
   }
 };
-const getCachedRotation = () => {
-  const cachedRotationString = localStorage.getItem(ROTATION_STORAGE_KEY);
-  if (cachedRotationString == null || cachedRotationString.trim() === "") {
-    return 0;
-  }
-  const cachedRotation = parseInt(cachedRotationString, 10);
-  if (Number.isNaN(cachedRotation)) {
-    return 0;
-  }
-  return (cachedRotation % 360 + 360) % 360;
-};
-const getCameraLayout = (props) => {
-  const { viewportWidth, viewportHeight, aspectRatio, rotation } = props;
-  const isQuarterTurn = rotation % 180 !== 0;
-  const availableWidth = isQuarterTurn ? viewportHeight : viewportWidth;
-  const availableHeight = isQuarterTurn ? viewportWidth : viewportHeight;
-  let cameraWidth;
-  let cameraHeight;
-  if (availableWidth / availableHeight >= aspectRatio) {
-    cameraHeight = availableHeight;
-    cameraWidth = cameraHeight * aspectRatio;
-  } else {
-    cameraWidth = availableWidth;
-    cameraHeight = cameraWidth / aspectRatio;
-  }
-  return {
-    width: cameraWidth,
-    height: cameraHeight,
-    visualWidth: isQuarterTurn ? cameraHeight : cameraWidth,
-    visualHeight: isQuarterTurn ? cameraWidth : cameraHeight
-  };
-};
 function MarkupCamera(props) {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const [strokeColor, _setStrokeColor] = reactExports.useState(
-    localStorage.getItem("pnp.stroke.color") ?? DEFAULT_STROKE_COLOR
-  );
-  const [strokeWidth, _setStrokeWidth] = reactExports.useState(
-    getCachedStrokeWidth() ?? DEFAULT_STROKE_WIDTH
-  );
+  const [strokeColor, _setStrokeColor] = reactExports.useState(localStorage.getItem("pnp.stroke.color") ?? DEFAULT_STROKE_COLOR);
+  const [strokeWidth, _setStrokeWidth] = reactExports.useState(getCachedStrokeWidth() ?? DEFAULT_STROKE_WIDTH);
   const [_zoom, _setZoom] = reactExports.useState(1);
-  const [rotation, setRotation] = reactExports.useState(getCachedRotation);
-  const [scrollAreaStyle, setScrollAreaStyle] = reactExports.useState({});
-  const [cameraStyle, setCameraStyle] = reactExports.useState({});
-  const [markupSize, setMarkupSize] = reactExports.useState({ width, height });
+  const [style, setStyle] = reactExports.useState({});
   const [aspectRatio, setAspectRatio] = reactExports.useState(width / height);
   const containerRef = reactExports.useRef(null);
   const colorButtonRef = reactExports.useRef(null);
@@ -19036,21 +18909,18 @@ function MarkupCamera(props) {
     drawingEnabled,
     setDrawingEnabled
   } = props;
-  const setStrokeWidth = reactExports.useCallback(
-    (width2) => {
-      if (width2 < 0) {
-        width2 = 0;
-      } else if (width2 > MAX_STROKE_WIDTH) {
-        width2 = MAX_STROKE_WIDTH;
-      }
-      if (width2 === strokeWidth) {
-        return;
-      }
-      localStorage.setItem("pnp.stroke.width", width2.toString());
-      _setStrokeWidth(width2);
-    },
-    [strokeWidth]
-  );
+  const setStrokeWidth = reactExports.useCallback((width2) => {
+    if (width2 < 0) {
+      width2 = 0;
+    } else if (width2 > MAX_STROKE_WIDTH) {
+      width2 = MAX_STROKE_WIDTH;
+    }
+    if (width2 === strokeWidth) {
+      return;
+    }
+    localStorage.setItem("pnp.stroke.width", width2.toString());
+    _setStrokeWidth(width2);
+  }, [strokeWidth]);
   const setStrokeColor = (color) => {
     localStorage.setItem("pnp.stroke.color", color);
     _setStrokeColor(color);
@@ -19063,56 +18933,50 @@ function MarkupCamera(props) {
     }
     _setZoom(zoom);
   };
-  const rotateCamera = reactExports.useCallback((direction) => {
-    setRotation((currentRotation) => {
-      const nextRotation = currentRotation + (direction === "left" ? -90 : 90);
-      const normalizedRotation = (nextRotation % 360 + 360) % 360;
-      localStorage.setItem(ROTATION_STORAGE_KEY, normalizedRotation.toString());
-      return normalizedRotation;
-    });
-  }, []);
   const clearCanvas = reactExports.useCallback(() => {
-    window.dispatchEvent(
-      new CustomEvent("ClearCanvas", {
-        bubbles: true,
-        detail: { id: props.canvasId }
-      })
-    );
+    window.dispatchEvent(new CustomEvent("ClearCanvas", { bubbles: true, detail: { id: props.canvasId } }));
   }, [props.canvasId]);
   reactExports.useLayoutEffect(() => {
-    const nextScrollAreaStyle = {};
-    const nextCameraStyle = {};
-    const container2 = containerRef.current;
-    if (container2 == null) {
-      setScrollAreaStyle({});
-      setCameraStyle({});
+    const style2 = {};
+    if (_zoom === 0) {
+      setStyle({});
       return;
     }
-    const layout = getCameraLayout({
-      viewportWidth: width,
-      viewportHeight: height,
-      aspectRatio,
-      rotation
-    });
+    const container2 = containerRef.current;
+    if (container2 == null) {
+      setStyle({});
+      return;
+    }
+    let widthSized;
+    let heightSized;
+    if (width >= height) {
+      widthSized = height * aspectRatio;
+      heightSized = height;
+    } else {
+      widthSized = width;
+      heightSized = width * aspectRatio;
+    }
+    style2.width = `${widthSized.toString()}px`;
+    style2.height = `${heightSized.toString()}px`;
     const zoom = 1 + _zoom / 5;
-    const scaledWidth = zoom * layout.visualWidth;
-    const scaledHeight = zoom * layout.visualHeight;
-    const scrollWidth = Math.max(width, scaledWidth);
-    const scrollHeight = Math.max(height, scaledHeight);
-    nextScrollAreaStyle.width = `${scrollWidth.toString()}px`;
-    nextScrollAreaStyle.height = `${scrollHeight.toString()}px`;
-    nextCameraStyle.width = `${layout.width.toString()}px`;
-    nextCameraStyle.height = `${layout.height.toString()}px`;
-    nextCameraStyle.left = `${((scrollWidth - layout.width) / 2).toString()}px`;
-    nextCameraStyle.top = `${((scrollHeight - layout.height) / 2).toString()}px`;
-    nextCameraStyle.transform = `rotate(${rotation.toString()}deg) scale(${zoom.toString()})`;
-    setMarkupSize({
-      width: Math.round(layout.width),
-      height: Math.round(layout.height)
+    style2.transform = `scale(${zoom.toString()})`;
+    const scaledWidth = zoom * (widthSized + 20);
+    const offsetX = (scaledWidth - width) / 2;
+    if (offsetX > 0) {
+      style2.marginLeft = offsetX.toString() + "px";
+    }
+    const scaledHeight = zoom * heightSized;
+    const offsetY = (scaledHeight - height) / 2;
+    console.log({
+      scaledHeight,
+      height,
+      offsetY
     });
-    setScrollAreaStyle(nextScrollAreaStyle);
-    setCameraStyle(nextCameraStyle);
-  }, [_zoom, width, height, aspectRatio, rotation]);
+    if (offsetY > 0) {
+      style2.marginTop = offsetY.toString() + "px";
+    }
+    setStyle(style2);
+  }, [_zoom, width, height, setStyle, aspectRatio, setAspectRatio]);
   reactExports.useEffect(() => {
     const onKey = (e) => {
       const ran = () => {
@@ -19131,12 +18995,6 @@ function MarkupCamera(props) {
         } else if (e.key === "0") {
           ran();
           setZoom(0);
-        } else if (e.key === "ArrowLeft" || e.key.toLowerCase() === "l") {
-          ran();
-          rotateCamera("left");
-        } else if (e.key === "ArrowRight" || e.key.toLowerCase() === "r") {
-          ran();
-          rotateCamera("right");
         }
       } else if (e.key === "[") {
         ran();
@@ -19176,183 +19034,78 @@ function MarkupCamera(props) {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("wheel", onWheel);
     };
-  }, [
-    setStrokeWidth,
-    _zoom,
-    strokeWidth,
-    setDrawingEnabled,
-    drawingEnabled,
-    clearCanvas,
-    rotateCamera
-  ]);
-  const toolbar = /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    "div",
-    {
-      className: `markup-camera-toolbar ${showToolbars ? "" : "hidden"}`,
-      onPointerEnter: props.onControlsPointerEnter,
-      onPointerLeave: props.onControlsPointerLeave,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field rotate-control", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Rotate" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "icon-button app-icon-button",
-              "aria-label": "rotate camera left",
-              onClick: () => {
-                rotateCamera("left");
-              },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined button-icon", children: "rotate_left" })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "icon-button app-icon-button",
-              "aria-label": "rotate camera right",
-              onClick: () => {
-                rotateCamera("right");
-              },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined button-icon", children: "rotate_right" })
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "label",
-          {
-            className: `inline-input-field color-control ${drawingEnabled ? "" : "display-hidden"}`,
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: clearCanvas, children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "edit_off" }) })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "label",
-          {
-            className: `inline-input-field stroke-width-control ${drawingEnabled ? "" : "display-hidden"}`,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Thickness: " }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "range",
-                  min: "2",
-                  max: MAX_STROKE_WIDTH,
-                  value: strokeWidth,
-                  onChange: (e) => {
-                    setStrokeWidth(parseInt(e.target.value, 10));
-                  }
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "label",
-          {
-            className: `inline-input-field color-control ${drawingEnabled ? "" : "display-hidden"}`,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Color" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "color-container", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "color",
-                  value: strokeColor,
-                  ref: colorButtonRef,
-                  onChange: (e) => {
-                    setStrokeColor(e.target.value);
-                  }
-                }
-              ) })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field zoom-control", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Zoom" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "zoom-button",
-              "aria-label": "zoom out",
-              onClick: () => {
-                setZoom(_zoom - 1);
-              },
-              disabled: _zoom <= 0,
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "remove" })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              className: "zoom-slider",
-              type: "range",
-              min: 0,
-              max: MAX_ZOOM,
-              value: _zoom,
-              onChange: (e) => {
-                setZoom(parseInt(e.target.value, 10));
-              }
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "zoom-button",
-              "aria-label": "zoom in",
-              onClick: () => {
-                setZoom(_zoom + 1);
-              },
-              disabled: _zoom >= MAX_ZOOM,
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "add" })
-            }
-          )
-        ] })
-      ]
-    }
-  );
+  }, [setStrokeWidth, _zoom, strokeWidth, setDrawingEnabled, drawingEnabled, clearCanvas]);
+  const toolbar = /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `markup-camera-toolbar ${showToolbars && drawingEnabled ? "" : "hidden"}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "inline-input-field color-control", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: clearCanvas, children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "edit_off" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field stroke-width-control", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Thickness: " }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "range", min: "2", max: MAX_STROKE_WIDTH, value: strokeWidth, onChange: (e) => {
+        setStrokeWidth(parseInt(e.target.value, 10));
+      } })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field color-control", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Color" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "color-container", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "color", value: strokeColor, ref: colorButtonRef, onChange: (e) => {
+        setStrokeColor(e.target.value);
+      } }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "inline-input-field zoom-control", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Zoom" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: "zoom-button",
+          "aria-label": "zoom out",
+          onClick: () => {
+            setZoom(_zoom - 1);
+          },
+          disabled: _zoom <= 0,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "remove" })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "zoom-slider", type: "range", min: 0, max: MAX_ZOOM, value: _zoom, onChange: (e) => {
+        setZoom(parseInt(e.target.value, 10));
+      } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: "zoom-button",
+          "aria-label": "zoom in",
+          onClick: () => {
+            setZoom(_zoom + 1);
+          },
+          disabled: _zoom >= MAX_ZOOM,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "material-symbols-outlined", children: "add" })
+        }
+      )
+    ] })
+  ] });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "markup-camera-container toolbar-vert", children: [
     toolbar,
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: "markup-camera-scroll-area",
-        "data-testid": "markup-camera-scroll-area",
-        style: scrollAreaStyle,
-        ref: containerRef,
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            className: "markup-camera",
-            "data-testid": "markup-camera-surface",
-            style: cameraStyle,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                CameraView,
-                {
-                  camera: mainCamera,
-                  kind: "main",
-                  onError: onErrorToast,
-                  onCameraChange: setMainCamera,
-                  isFallbackCamera: !hasMainCamera,
-                  setCameraAspectRatio: setAspectRatio
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Markup,
-                {
-                  size: markupSize,
-                  strokeColor,
-                  strokeWidth,
-                  enabled: props.drawingEnabled,
-                  brushScale: 1 / (1 + _zoom / 10),
-                  canvasId: props.canvasId,
-                  rotation,
-                  cssZoom: 1 + _zoom / 5
-                }
-              )
-            ]
-          }
-        )
-      }
-    )
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "markup-camera", style, ref: containerRef, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        CameraView,
+        {
+          camera: mainCamera,
+          kind: "main",
+          onError: onErrorToast,
+          onCameraChange: setMainCamera,
+          isFallbackCamera: !hasMainCamera,
+          setCameraAspectRatio: setAspectRatio
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Markup,
+        {
+          size: { width, height },
+          strokeColor,
+          strokeWidth,
+          enabled: props.drawingEnabled,
+          brushScale: 1 / (1 + _zoom / 10),
+          canvasId: props.canvasId
+        }
+      )
+    ] })
   ] });
 }
 let loaded = 0;
@@ -19366,34 +19119,11 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = reactExports.useState(false);
   const hasValidCamera = useAppSelector(hasValidCameraSelector);
   const [drawingEnabled, setDrawingEnabled] = reactExports.useState(false);
-  const controlsHideTimer = reactExports.useRef(null);
   const canvasId = "main-canvas";
-  const clearControlsHideTimer = reactExports.useCallback(() => {
-    if (controlsHideTimer.current == null) {
-      return;
-    }
-    window.clearTimeout(controlsHideTimer.current);
-    controlsHideTimer.current = null;
-  }, []);
-  const scheduleControlsHide = reactExports.useCallback(() => {
-    clearControlsHideTimer();
-    controlsHideTimer.current = window.setTimeout(() => {
-      dispatch(setShowControls(false));
-      controlsHideTimer.current = null;
-    }, 2400);
-  }, [clearControlsHideTimer, dispatch]);
-  const brieflyShowControls = reactExports.useCallback(() => {
-    dispatch(setShowControls(true));
-    scheduleControlsHide();
-  }, [dispatch, scheduleControlsHide]);
   reactExports.useEffect(() => {
     console.log(`Loaded: ${(++loaded).toString()}`);
-    const mediaDevices = navigator.mediaDevices;
     const onLoadState = () => {
-      if (mediaDevices == null) {
-        return;
-      }
-      mediaDevices.getUserMedia({ audio: false, video: true }).then((stream) => {
+      navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then((stream) => {
         console.log(`"Device changed to: Stream[${stream.id}]`);
       }).catch((e) => {
         console.error("Camera list not okay; ", e);
@@ -19405,34 +19135,16 @@ const App = () => {
       });
       dispatch(refreshLoadedCameras());
     };
-    mediaDevices == null ? void 0 : mediaDevices.addEventListener("devicechange", onLoadState);
+    navigator.mediaDevices.addEventListener("devicechange", onLoadState);
     window.addEventListener("load", onLoadState);
     document.addEventListener("load", onLoadState);
     onLoadState();
     return () => {
-      mediaDevices == null ? void 0 : mediaDevices.removeEventListener("devicechange", onLoadState);
+      navigator.mediaDevices.removeEventListener("devicechange", onLoadState);
       window.removeEventListener("load", onLoadState);
       document.removeEventListener("load", onLoadState);
     };
   }, [dispatch]);
-  reactExports.useEffect(() => {
-    scheduleControlsHide();
-    return () => {
-      clearControlsHideTimer();
-    };
-  }, [clearControlsHideTimer, scheduleControlsHide]);
-  reactExports.useEffect(() => {
-    const revealOnEdgeHover = (e) => {
-      const revealHeight = window.innerHeight * 0.22;
-      if (e.clientY <= revealHeight || e.clientY >= window.innerHeight - revealHeight) {
-        brieflyShowControls();
-      }
-    };
-    window.addEventListener("pointermove", revealOnEdgeHover);
-    return () => {
-      window.removeEventListener("pointermove", revealOnEdgeHover);
-    };
-  }, [brieflyShowControls]);
   const setMainCamera = (device) => {
     if (device == null) {
       dispatch(clearCamera("main"));
@@ -19473,26 +19185,29 @@ const App = () => {
       }
     };
     const click = (e) => {
-      const target = e.target;
-      if (target == null || target.closest(".markup-camera-toolbar") != null || target.closest(".device-buttons") != null || target.closest(".DeviceListModal") != null) {
+      var _a2, _b;
+      const video = (_a2 = e.target) == null ? void 0 : _a2.closest("video");
+      if (video == null) {
         return;
       }
-      const app = target.closest(".App");
+      const app = (_b = video.parentElement) == null ? void 0 : _b.parentElement;
       if (app == null) {
         return;
       }
       if (!app.classList.contains("App")) {
         return;
       }
-      brieflyShowControls();
+      e.preventDefault();
+      e.stopPropagation();
+      dispatch(toggleCameraControls());
     };
     window.addEventListener("keyup", keyup);
-    window.addEventListener("pointerdown", click, true);
+    window.addEventListener("click", click);
     return () => {
       window.removeEventListener("keyup", keyup);
-      window.removeEventListener("pointerdown", click, true);
+      window.removeEventListener("click", click);
     };
-  }, [brieflyShowControls, dispatch]);
+  }, [dispatch]);
   const multiCamera = isMultiCameraAllowed() && devices != null && devices.length > 1;
   const hasAnyDevice = devices != null && devices.length > 0;
   const swapCameraButton = hasSwappableCameras && multiCamera ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `icon-button app-icon-button swap-camera-button hide-on-hide-controls`, onClick: () => {
@@ -19519,19 +19234,11 @@ const App = () => {
     }
   ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `App ${showControls ? "" : "hide-controls"}`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: `device-buttons`,
-        onPointerEnter: clearControlsHideTimer,
-        onPointerLeave: scheduleControlsHide,
-        children: [
-          devicesButton,
-          swapCameraButton,
-          drawButton
-        ]
-      }
-    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `device-buttons`, children: [
+      devicesButton,
+      swapCameraButton,
+      drawButton
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       MarkupCamera,
       {
@@ -19541,9 +19248,7 @@ const App = () => {
         showToolbars: showControls,
         drawingEnabled,
         setDrawingEnabled,
-        canvasId,
-        onControlsPointerEnter: clearControlsHideTimer,
-        onControlsPointerLeave: scheduleControlsHide
+        canvasId
       }
     ),
     multiCamera ? /* @__PURE__ */ jsxRuntimeExports.jsx(
