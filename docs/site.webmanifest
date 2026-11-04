@@ -1,8 +1,8 @@
 {
-  "id": "pnp.dborcas.com",
+  "id": "dborcas.github.io/pnp/",
   "name": "Doc Camera",
   "short_name": "DocCam",
-  "start_url": "https://pnp.dborcas.com",
+  "start_url": "https://dborcas.github.io/pnp",
   "description": "Passes a device's camera output into a browser window",
   "icons": [
     {
