@@ -56,16 +56,15 @@ const getCachedOrFetch = async (cacheName, request) => {
 const CACHE_NAME = "pnp-web-cache";
 const urlsToCache = [
   "/",
-  "pnp/",
-  "pnp/index.html",
+  "pnp",
   "index.html",
-  "pnp/assets/index.js",
+  "assets/index.js",
   // Your main JavaScript file
-  "pnp/assets/index.css",
-  "pnp/assets/toastify.min.css",
-  "pnp/doc-cam-apple-touch-icon.png",
-  "pnp/favicon.ico",
-  "pnp/site.webmanifest",
+  "assets/index.css",
+  "assets/toastify.min.css",
+  "doc-cam-apple-touch-icon.png",
+  "favicon.ico",
+  "site.webmanifest",
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=cached,cameraswitch,close,no_photography,photo_camera,visibility,visibility_off"
 ];
 console.log("Loading service worker");
